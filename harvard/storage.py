@@ -19,7 +19,7 @@ class Storage:
                 user TEXT NOT NULL)''',
                 {})
 
-    def insert(self, collection):
+    def insert_collection(self, collection):
         self._execute("INSERT INTO collections(id, name, description, user) VALUES(:id, :name, :description, :user)",
             { "id": collection.id(), "name": collection.name(), "description": collection.description(), "user": collection.user() })
 

@@ -19,7 +19,7 @@ class TestDb(unittest.TestCase):
 
         collection = Collection('abc123', 'My User','My Collection','Just a test')
 
-        storage.insert(collection)
+        storage.insert_collection(collection)
 
         db_collection = storage.select_collection_by_name('My User', 'My Collection')
 
