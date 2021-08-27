@@ -33,3 +33,16 @@ class TestReference(unittest.TestCase):
             '<span>Raff, D. & Scranton, P. (2016) <i>The Emergence of Routines: Entrepreneurship, Organization and Business History</i>. Oxford: Oxford University Press. Available from: <a href="http://0-www.oxfordscholarship.com.serlib0.essex.ac.uk/view/10.1093/acprof:oso/9780198787761.001.0001/acprof-9780198787761#">http://0-www.oxfordscholarship.com.serlib0.essex.ac.uk/view/10.1093/acprof:oso/9780198787761.001.0001/acprof-9780198787761#</a> [Accessed 23 May 2018].</span>',
             ref.format_html())
         
+    def test_vitalsource(self):
+        ref = Reference.new_vitalsource("My User", "My Collection")                                            \
+            .with_authors('Tosey, P. & Gregory, J.')                                                     \
+            .with_year('2001')                                                                           \
+            .with_title('Dictionary of Personal Development') \
+            .with_place_of_publication('Brisbane')                                                         \
+            .with_publisher('Wiley Blackwell')                                                   \
+            .with_date_of_access('23 May 2018')                                                          \
+            .build()
+
+        self.assertEqual(
+            '<span>Tosey, P. & Gregory, J. (2001) <i>Dictionary of Personal Development</i>. Brisbane: Wiley Blackwell. Available via the Vitalsource Bookshelf. [Accessed 23 May 2018].</span>',
+            ref.format_html())

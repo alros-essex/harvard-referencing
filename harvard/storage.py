@@ -51,7 +51,7 @@ class Storage:
                 name = row[1], 
                 description = row[2])
 
-    def insert_reference(self, reference):
+    def insert_reference(self, user, collection, reference):
         pass
 
     def select_references_by_collection(self, user, collection):

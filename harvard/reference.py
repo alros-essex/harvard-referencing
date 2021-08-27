@@ -2,7 +2,22 @@ from enum import Enum
 
 class ReferenceType(Enum):
     BOOK = 'book',
-    EBOOK = 'ebook'
+    EBOOK = 'ebook',
+    # CHAPTER_IN_EDITED_BOOK = 'chapter_in_edited_book',
+    VITALSOURCE = 'vitalsource'
+    # JOURNAL_ARTICLE = 'journal_article',
+    # JOURNAL_ARTICLE_ONLINE = 'journal_article_online',
+    # WEBSITE = 'website',
+    # NEWSPAPER_ARTICLE = 'newspaper_article',
+    # ELECTRONIC_NEWSPAPER_ARTICLE = 'electronic_newspaper_article',
+    # RESEARCH_REPORT = 'research_report',
+    # RESEARCH_REPORT_ONLINE = 'research_report_online',
+    # INDIVIDUAL_CONFERENCE_PAPERS = 'individual_conference_papers',
+    # PERSONAL_CORRESPONDENCE = 'personal_correspondence',
+    # LECTURE_MATERIALS = 'lecture_materials',
+    # UNITED_NATIONS_RESOLUTIONS = 'united_nations_resolutions',
+    # INTERNATIONAL_TREATIES = 'international_treaties'
+
 
 class Reference():
 
@@ -32,8 +47,11 @@ class Reference():
     def new_ebook(user, collection):
         return ReferenceBuilder(user, collection, ReferenceType.EBOOK)
 
+    @staticmethod
+    def new_vitalsource(user, collection):
+        return ReferenceBuilder(user, collection, ReferenceType.VITALSOURCE)
 
-    def _format_book_html(self):
+    def __format_book_html(self):
         """
         1. Author(s) surname and initials, editor(s) surname and initials or the organisation responsible for writing the book – followed by a full stop
         2. Year of publication – in (brackets)
@@ -53,7 +71,7 @@ class Reference():
                 place = self._place_of_publication,
                 publisher = self._publisher)
 
-    def _format_ebook_html(self):
+    def __format_ebook_html(self):
         """
         1. Author(s) surname and initials, editor(s) surname and initials or the organisation responsible for writing the book – followed by a full stop
         2. Year of publication – in (brackets)
@@ -78,6 +96,28 @@ class Reference():
                 url = self._available_from_url,
                 last_access = self._date_of_access)
 
+    def __format_vitalsource_html(self):
+        """
+        1. Author(s) surname and initials, editor(s) surname and initials or the organisation responsible for writing the book – followed by a full stop
+        2. Year of publication – in (brackets)
+        3. Title and subtitle (if any) –in italics - followed by a full stop
+        4. Edition (i.e. 2nd ed) – followed by a full stop
+        5. Place of publication – followed by a colon
+        6. Publisher – followed by a full stop
+        7. Available via the Vitalsource Bookshelf – followed by a full stop
+        8. Date of Access – in [square brackets] followed by a full stop
+        """
+        # Tosey, P. & Gregory, J. (2001) Dictionary of Personal Development. Brisbane: Wiley Blackwell. Available via the Vitalsource Bookshelf. [Accessed 23 May 2018].
+        return '<span>{authors} ({year}) <i>{title}</i>.{edition} {place}: {publisher}. Available via the Vitalsource Bookshelf. [Accessed {last_access}].</span>'.format(
+            authors = self._authors,
+            year = self.__format_optional(self._year, prefix='', default='N.D.'),
+            title = self._title,
+            edition = self.__format_optional(self._edition, suffix=' ed.'),
+            place = self._place_of_publication,
+            publisher = self._publisher,
+            last_access = self._date_of_access)
+
+
     def __format_optional(self, value, prefix=' ', suffix='', default=''):
         if value is None:
             return default
@@ -85,8 +125,9 @@ class Reference():
             return prefix + value + suffix
 
     __html_mapping = {
-        ReferenceType.BOOK: _format_book_html,
-        ReferenceType.EBOOK: _format_ebook_html
+        ReferenceType.BOOK: __format_book_html,
+        ReferenceType.EBOOK: __format_ebook_html,
+        ReferenceType.VITALSOURCE: __format_vitalsource_html
     }
 
     def format_html(self):

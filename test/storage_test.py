@@ -24,7 +24,18 @@ class TestStorage(unittest.TestCase):
         self.assertEqual(collection, db_collection)
 
     def test_inser_select_reference(self):
-        pass
+        reference = Reference.new_book("My User", "My Collection")          \
+            .with_authors('Armstrong, G., Kotler, P. & Opresnik, O.') \
+            .with_year('2016')                                        \
+            .with_title('Marketing: An Introduction')                 \
+            .with_edition('13th')                                     \
+            .with_place_of_publication('Harlow')                      \
+            .with_publisher('Pearson Education Limited')              \
+            .build()
+        self.storage.insert_reference('My User', 'My Collection', reference)
+        db_references = self.storage.select_references_by_collection('My User', 'My Collection')
+        self.assertEquals(1,len(db_references))
+        self.asserEquals(reference, db_references[0])
 
 if __name__ == '__main__':
     unittest.main()
