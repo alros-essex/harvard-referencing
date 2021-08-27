@@ -17,7 +17,7 @@ class TestDb(unittest.TestCase):
     def test_insert_select(self):
         storage = Storage()
 
-        collection = Collection('abc123', 'My User','My Collection','Just a test')
+        collection = Collection('My User','My Collection','Just a test')
 
         storage.insert_collection(collection)
 
