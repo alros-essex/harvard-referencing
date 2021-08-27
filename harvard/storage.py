@@ -16,17 +16,32 @@ class Storage:
                 user TEXT NOT NULL,
                 name TEXT NOT NULL,
                 description TEXT NOT NULL, 
-                PRIMARY KEY (user, name))''',
-                {})
+                PRIMARY KEY (user, name))''')
+            self._execute('''CREATE TABLE quote_references(
+                user TEXT NOT NULL,
+                collection TEXT NOT NULL,
+                type TEXT,
+                authors TEXT,
+                year TEXT,
+                title TEXT,
+                journal TEXT,
+                volume TEXT,
+                edition TEXT,
+                issue TEXT,
+                place_of_publication TEXT,
+                publisher TEXT,
+                available_from_url TEXT,
+                date_of_access TEXT,
+                page_numbers TEXT)''')
             
 
     def insert_collection(self, collection):
         self._execute("INSERT INTO collections(name, description, user) VALUES(:name, :description, :user)",
             { "name": collection.name(), "description": collection.description(), "user": collection.user() })
 
-    def select_collection_by_name(self, user, name):
+    def select_collection_by_name(self, user, collection):
         cur = self._execute("SELECT user, name, description FROM collections where user = :user and name = :name", 
-            { "user": user, "name": name })
+            { "user": user, "name": collection })
         row = cur.fetchone()
         if row == None:
             return None
@@ -36,7 +51,13 @@ class Storage:
                 name = row[1], 
                 description = row[2])
 
-    def _execute(self, statement, params):
+    def insert_reference(self, reference):
+        pass
+
+    def select_references_by_collection(self, user, collection):
+        pass
+
+    def _execute(self, statement, params={}):
         cur = self.con.cursor()
         cur.execute(statement, params)
         self.con.commit()
