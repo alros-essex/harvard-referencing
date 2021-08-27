@@ -23,8 +23,9 @@ class Storage:
         self._execute("INSERT INTO collections(id, name, description, user) VALUES(:id, :name, :description, :user)",
             { "id": collection.id(), "name": collection.name(), "description": collection.description(), "user": collection.user() })
 
-    def select_by_name(self, name):
-        cur = self._execute("SELECT id, user, name, description FROM collections where name = :name", { "name": name })
+    def select_collection_by_name(self, user, name):
+        cur = self._execute("SELECT id, user, name, description FROM collections where user = :user and name = :name", 
+            { "user": user, "name": name })
         row = cur.fetchone()
         if row == None:
             return None

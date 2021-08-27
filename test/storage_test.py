@@ -21,7 +21,7 @@ class TestDb(unittest.TestCase):
 
         storage.insert(collection)
 
-        db_collection = storage.select_by_name('My Collection')
+        db_collection = storage.select_collection_by_name('My User', 'My Collection')
 
         print("db collection is {coll}".format(coll = db_collection))
 
