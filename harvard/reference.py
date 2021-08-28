@@ -19,6 +19,10 @@ class ReferenceType(Enum):
     # UNITED_NATIONS_RESOLUTIONS = 'united_nations_resolutions'
     # INTERNATIONAL_TREATIES = 'international_treaties'
 
+    @classmethod
+    def list(cls):
+        return list(map(lambda c: c.value, cls))
+
 
 class Reference():
 
@@ -55,7 +59,7 @@ class BookReference(Reference):
         7. Publisher – followed by a full stop
         """
         # Armstrong, G., Kotler, P. & Opresnik, O. (2016) Marketing: An Introduction. 13th ed. Harlow: Pearson Education Limited.
-        return "{authors} ({year}) \x1B[3m{title}\x1B[0m.{volume}{edition} {place}: {publisher}.".format(
+        return "{authors} ({year}) _{title}_.{volume}{edition} {place}: {publisher}.".format(
                 authors = self.authors,
                 year = super().format_optional(self.year, prefix='', default='N.D.'),
                 title = self.title,
@@ -90,7 +94,7 @@ class EbookReference(Reference):
         # Oxford: Oxford University Press. Available from: 
         # http://0- www.oxfordscholarship.com.serlib0.essex.ac.uk/view/10.1093/acprof:oso/9780198787761.001.0001/acprof- 9780198787761# 
         # [Accessed 23 May 2018].
-        return '{authors} ({year}) \x1B[3m{title}\x1B[0m.{edition} {place}: {publisher}. Available from: {url} [Accessed {last_access}].'.format(
+        return '{authors} ({year}) _{title}_.{edition} {place}: {publisher}. Available from: {url} [Accessed {last_access}].'.format(
                 authors = self.authors,
                 year = super().format_optional(self.year, prefix='', default='N.D.'),
                 title = self.title,
@@ -122,7 +126,7 @@ class VitalsourceReference(Reference):
         8. Date of Access – in [square brackets] followed by a full stop
         """
         # Tosey, P. & Gregory, J. (2001) Dictionary of Personal Development. Brisbane: Wiley Blackwell. Available via the Vitalsource Bookshelf. [Accessed 23 May 2018].
-        return '{authors} ({year}) \x1B[3m{title}\x1B[0m.{edition} {place}: {publisher}. Available via the Vitalsource Bookshelf. [Accessed {last_access}].'.format(
+        return '{authors} ({year}) _{title}_.{edition} {place}: {publisher}. Available via the Vitalsource Bookshelf. [Accessed {last_access}].'.format(
             authors = self.authors,
             year = super().format_optional(self.year, prefix='', default='N.D.'),
             title = self.title,

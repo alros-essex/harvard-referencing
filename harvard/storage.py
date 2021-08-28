@@ -21,5 +21,7 @@ class Storage:
             
 
     def select_references_by_collection(self, collection: Collection) -> List[Reference]:
+        if(collection is None):
+            return None
         entry = self.__collections[collection.name]
         return entry["references"]

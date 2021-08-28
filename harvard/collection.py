@@ -1,9 +1,12 @@
+from .reference import Reference
+from typing import List
+
 class Collection():
 
     def __init__(self, name:str, description:str):
         self.name = name
         self.description = description
-        self.references = []
+        self.references: List[Reference] = []
     
 
 #    def __eq__(self, o: object) -> bool:
