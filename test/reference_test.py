@@ -1,48 +1,42 @@
-from harvard.reference import Reference
+from harvard.collection import Collection
+from harvard.reference import BookReference
+from harvard.reference import EbookReference
+from harvard.reference import VitalsourceReference
 
 import unittest
 
 class TestReference(unittest.TestCase):
 
-    def test_book(self):
-        ref = Reference.new_book("My User", "My Collection")          \
-            .with_authors('Armstrong, G., Kotler, P. & Opresnik, O.') \
-            .with_year('2016')                                        \
-            .with_title('Marketing: An Introduction')                 \
-            .with_edition('13th')                                     \
-            .with_place_of_publication('Harlow')                      \
-            .with_publisher('Pearson Education Limited')              \
-            .build()
-            
+    def test_book(self):           
         self.assertEqual(
-            "<span>Armstrong, G., Kotler, P. & Opresnik, O. (2016) <i>Marketing: An Introduction</i>. 13th ed. Harlow: Pearson Education Limited.</span>",
-            ref.format_html())
+            "Armstrong, G., Kotler, P. & Opresnik, O. (2016) \x1B[3mMarketing: An Introduction\x1B[0m. 13th ed. Harlow: Pearson Education Limited.",
+            BookReference(
+                authors = 'Armstrong, G., Kotler, P. & Opresnik, O.',
+                year = '2016',
+                title = 'Marketing: An Introduction', 
+                place = 'Harlow',
+                publisher = 'Pearson Education Limited',
+                edition = '13th').format_console())
 
     def test_ebook(self):
-        ref = Reference.new_ebook("My User", "My Collection")                                            \
-            .with_authors('Raff, D. & Scranton, P.')                                                     \
-            .with_year('2016')                                                                           \
-            .with_title('The Emergence of Routines: Entrepreneurship, Organization and Business History') \
-            .with_place_of_publication('Oxford')                                                         \
-            .with_publisher('Oxford University Press')                                                   \
-            .with_available_from_url('http://0-www.oxfordscholarship.com.serlib0.essex.ac.uk/view/10.1093/acprof:oso/9780198787761.001.0001/acprof-9780198787761#')\
-            .with_date_of_access('23 May 2018')                                                          \
-            .build()
-
         self.assertEqual(
-            '<span>Raff, D. & Scranton, P. (2016) <i>The Emergence of Routines: Entrepreneurship, Organization and Business History</i>. Oxford: Oxford University Press. Available from: <a href="http://0-www.oxfordscholarship.com.serlib0.essex.ac.uk/view/10.1093/acprof:oso/9780198787761.001.0001/acprof-9780198787761#">http://0-www.oxfordscholarship.com.serlib0.essex.ac.uk/view/10.1093/acprof:oso/9780198787761.001.0001/acprof-9780198787761#</a> [Accessed 23 May 2018].</span>',
-            ref.format_html())
+            'Raff, D. & Scranton, P. (2016) \x1B[3mThe Emergence of Routines: Entrepreneurship, Organization and Business History\x1B[0m. Oxford: Oxford University Press. Available from: http://0-www.oxfordscholarship.com.serlib0.essex.ac.uk/view/10.1093/acprof:oso/9780198787761.001.0001/acprof-9780198787761# [Accessed 23 May 2018].',
+            EbookReference(
+                authors = 'Raff, D. & Scranton, P.',
+                year = '2016',
+                title = 'The Emergence of Routines: Entrepreneurship, Organization and Business History',
+                place = 'Oxford',
+                publisher = 'Oxford University Press',
+                url = 'http://0-www.oxfordscholarship.com.serlib0.essex.ac.uk/view/10.1093/acprof:oso/9780198787761.001.0001/acprof-9780198787761#',
+                last_access = '23 May 2018').format_console())
         
     def test_vitalsource(self):
-        ref = Reference.new_vitalsource("My User", "My Collection")                                            \
-            .with_authors('Tosey, P. & Gregory, J.')                                                     \
-            .with_year('2001')                                                                           \
-            .with_title('Dictionary of Personal Development') \
-            .with_place_of_publication('Brisbane')                                                         \
-            .with_publisher('Wiley Blackwell')                                                   \
-            .with_date_of_access('23 May 2018')                                                          \
-            .build()
-
         self.assertEqual(
-            '<span>Tosey, P. & Gregory, J. (2001) <i>Dictionary of Personal Development</i>. Brisbane: Wiley Blackwell. Available via the Vitalsource Bookshelf. [Accessed 23 May 2018].</span>',
-            ref.format_html())
+            'Tosey, P. & Gregory, J. (2001) \x1B[3mDictionary of Personal Development\x1B[0m. Brisbane: Wiley Blackwell. Available via the Vitalsource Bookshelf. [Accessed 23 May 2018].',
+            VitalsourceReference(
+                authors = 'Tosey, P. & Gregory, J.',
+                year = '2001',
+                title = 'Dictionary of Personal Development',
+                place= 'Brisbane',
+                publisher = 'Wiley Blackwell',
+                last_access = '23 May 2018').format_console())
