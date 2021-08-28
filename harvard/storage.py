@@ -1,3 +1,4 @@
+from PySimpleGUI.PySimpleGUI import Col
 from .collection import Collection
 from .reference import Reference
 
@@ -10,6 +11,9 @@ class Storage:
             
     def insert_collection(self, collection: Collection) -> None:
         self.__collections[collection.name] = { "collection": collection, "references": [] }
+
+    def select_all_collections(self) -> List[str]:
+        return list(self.__collections.keys())
 
     def select_collection_by_name(self, name: str) -> Collection:
         entry = self.__collections[name]

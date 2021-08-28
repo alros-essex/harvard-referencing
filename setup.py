@@ -6,6 +6,6 @@ setup(
     packages=find_packages(include=['harvard']),
     test_suite = 'test',
     install_requires=[
-        'pyqt5'
+        'pysimplegui'
     ]
 )
