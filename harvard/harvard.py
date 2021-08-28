@@ -115,7 +115,7 @@ class GUI():
     description = self.__get_input(coords_input_description, input_size, Color.WINDOW_INPUT)
     return Collection(name = name, description = description)
 
-  def __get_input(self, position: tuple[int, int], max_len:int, color: Color):
+  def __get_input(self, position: tuple, max_len:int, color: Color):
     input = ""
     key_pressed = 0
     while(not self.__is_return_key(key_pressed)):
@@ -129,7 +129,7 @@ class GUI():
       key_pressed = self.stdscr.getch()
     return input
     
-  def __print(self, text: str, position: tuple[int,int], color: Color, options: int = 0) -> tuple[int, int]:
+  def __print(self, text: str, position: tuple, color: Color, options: int = 0) -> tuple:
     settings = self.__color(color) | options
     self.stdscr.attron(settings)
     self.stdscr.addstr(position[0], position[1], text)
