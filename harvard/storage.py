@@ -2,7 +2,6 @@ from .collection import Collection
 from .reference import Reference
 
 from typing import List
-from typing import TypedDict
 
 class Storage:
 
