@@ -133,6 +133,52 @@ class Reference():
     def format_html(self):
         return Reference.__html_mapping[self._type](self)
 
+
+    def user(selt):
+        return self._user
+
+    def collection(self):
+        return self._collection
+    
+    def type(self):
+        return self._type
+
+    def authors(self):
+        return self._authors
+
+    def year(self):
+        return self._year
+
+    def title(self):
+        return self._title
+
+    def journal(self):
+        return self._journal
+
+    def volume(self):
+        return self._volume
+    
+    def edition(self):
+        return self._edition
+
+    def issue(self):
+        return self._issue
+
+    def place_of_publication(self):
+        return self._place_of_publication
+
+    def publisher(self):
+        return self._publisher
+
+    def available_from_url(self):
+        return self._available_from_url
+
+    def date_of_access(self):
+        return self._date_of_access
+
+    def page_numbers(self):
+        self._page_numbers
+
 class ReferenceBuilder():
     def __init__(self, user, collection, type):
         self._user = user

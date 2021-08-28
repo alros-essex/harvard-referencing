@@ -1,4 +1,5 @@
 from .collection import Collection
+from .reference import Reference
 
 from os.path import exists
 import sqlite3
@@ -51,8 +52,9 @@ class Storage:
                 name = row[1], 
                 description = row[2])
 
-    def insert_reference(self, user, collection, reference):
+    def insert_reference(self, reference: Reference):
         pass
+            
 
     def select_references_by_collection(self, user, collection):
         pass
