@@ -6,10 +6,19 @@ class State(Enum):
     NO_COLLECTIONS = 'No collections'
 
 class HandlerBase():
-    def prompt_user(self, text: str) -> str:
-        return input(text)
+
+    def __init__(self, storage: Storage):
+        self.storage = storage
+
+    def prompt_user(self, text: str, collection: str = None) -> str:
+        base = collection = '' if collection is None else '{coll}@'.format(coll = collection)
+        return input('harvard{base} {text} § '.format(base = base, text = text))
 
 class HandlerNoCollection(HandlerBase):
+
+    def __init(self,storage: Storage):
+        super().__init__(storage)
+
     def handle(self):
         print('input was: '+super().prompt_user('test'))
 
@@ -24,7 +33,7 @@ class Console:
 
     def loop(self):
         while True:
-            Console.state_handlers[self.state].handle()
+            self.state_handlers[self.state].handle()
 
 
 
