@@ -24,14 +24,17 @@ class Utility:
     @staticmethod
     def print_lines(lines: list):
         for line in lines:
-            if line.startswith('@title'):
-                line = '{color_fg}{color_bg}{line}{reset_bg}{reset_fg}'.format(line = line[len('@title'):],
-                    color_fg = Fore.BLACK, color_bg = Back.WHITE, reset_bg = Back.RESET, reset_fg = Fore.RESET)
-            elif line.startswith('@subtitle'):
-                line = '{style}{line}{reset_st}'.format(line = line[len('@subtitle'):],style = Style.DIM, reset_st = Style.RESET_ALL)
-            elif line.startswith('@option'):
-                line = '{style} - {line}{reset_st}'.format(line = line[len('@option'):],style = Style.DIM, reset_st = Style.RESET_ALL)
-            print(line)
+            if isinstance(line, list):
+                Utility.print_lines(line)
+            else:
+                if line.startswith('@title'):
+                    line = '{color_fg}{color_bg}{line}{reset_bg}{reset_fg}'.format(line = line[len('@title'):],
+                        color_fg = Fore.BLACK, color_bg = Back.WHITE, reset_bg = Back.RESET, reset_fg = Fore.RESET)
+                elif line.startswith('@subtitle'):
+                    line = '{style}{line}{reset_st}'.format(line = line[len('@subtitle'):],style = Style.DIM, reset_st = Style.RESET_ALL)
+                elif line.startswith('@option'):
+                    line = '{style} - {line}{reset_st}'.format(line = line[len('@option'):],style = Style.DIM, reset_st = Style.RESET_ALL)
+                print(line)
 
     @staticmethod
     def prompt_user_for_input(text: str = None, options = None) -> str:
@@ -89,39 +92,17 @@ class HandlerActiveCollection(HandlerBase):
         super().__init__(storage)
 
     def handle(self, collection: Collection):
-        def build_references(references):
-            lines = []
-            options = []
-            if references == []:
-                lines.append('@option <empty>')
-            else:
-                for i, reference in enumerate(collection.references):
-                    lines.append('     [{index}] : {ref}'.format(index = i, ref=reference.format_console()))
-                    options.append(i)
-            lines.append('')
-            return lines, options
+        ref_lines, ref_options = self.__build_references(collection.references)
+        opt_lines, opt_options = self.__build_options(collection.references)
         Utility.print_lines([
             '',
             '@title {name}'.format(name = collection.name),
             '@subtitle {description}'.format(description = collection.description),
             '',
-            '@title   References:'
-            ])
-        references, ref_options = build_references(collection.references)
-        Utility.print_lines(references)
-        lines = [
-            '@option Create [N]ew reference',
-            '@option [C]lose collection',
-            '@option EliMinate collection',
-            '']
-        options = ['N','C','M']
-        if len(collection.references) > 0:
-            lines.insert(2,'@option [E]dit reference')
-            lines.insert(3,'@option [D]elete reference')
-            options.insert(2, 'E')
-            options.insert(3, 'D')
-        Utility.print_lines(lines)
-        user_input = Utility.prompt_user_for_input(options=options)
+            '@title   References:',
+            ref_lines,
+            opt_lines])
+        user_input = Utility.prompt_user_for_input(options=opt_options)
         if user_input == 'N':
             return State.CREATE_NEW_REFERENCE, collection
         elif user_input == 'C':
@@ -132,6 +113,32 @@ class HandlerActiveCollection(HandlerBase):
             return State.DELETE_REFERENCE, {'collection': collection, 'options': ref_options}
         else:
             return State.EDIT_REFERENCE, {'collection': collection,'options': ref_options}
+
+    def __build_references(self, references):
+        lines = []
+        options = []
+        if references == []:
+            lines.append('@option <empty>')
+        else:
+            for i, reference in enumerate(references):
+                lines.append('    [{index}] : {ref}'.format(index = i, ref=reference.format_console()))
+                options.append(i)
+        lines.append('')
+        return lines, options
+
+    def __build_options(self, references):
+        lines = [
+            '@option Create [N]ew reference',
+            '@option [C]lose collection',
+            '@option EliMinate collection',
+            '']
+        options = ['N','C','M']
+        if len(references) > 0:
+            lines.insert(2,'@option [E]dit reference')
+            lines.insert(3,'@option [D]elete reference')
+            options.insert(2, 'E')
+            options.insert(3, 'D')
+        return lines, options
 
 class HandlerCreateNewReference(HandlerBase):
 
