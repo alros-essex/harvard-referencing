@@ -15,19 +15,25 @@ class Storage:
             os.mkdir(self.__base_path)
 
     def __load(self, filename:str):
-        with open('{path}/{filename}'.format(path = self.__base_path, filename = filename), "rb") as f:
+        with open(os.path.join(self.__base_path, filename), "rb") as f:
             data = pickle.load(f)
         return data
 
     def __save(self, filename:str, data) -> None:
-        with open('{path}/{file}'.format(path = self.__base_path, file = filename), "wb") as f:
+        with open(os.path.join(self.__base_path, filename), "wb") as f:
             pickle.dump(data, f)
+
+    def __delete(self, filename:str) -> None:
+        os.remove(os.path.join(self.__base_path, filename))
 
     def __load_collection(self, collection_name:str) -> Collection:
         return self.__load('{collection}.bin'.format(collection = collection_name))
             
     def save_collection(self, collection: Collection) -> None:
         self.__save('{collection}.bin'.format(collection = collection.name), collection)
+
+    def delete_collection(self, collection: Collection) -> None:
+        self.__delete('{collection}.bin'.format(collection = collection.name))
 
     def list_all_collections(self):
         files = os.listdir(self.__base_path)

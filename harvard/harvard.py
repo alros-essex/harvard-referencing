@@ -1,10 +1,9 @@
+from colorama import Fore, Back, Style
 from enum import Enum
 
-from colorama import Fore, Back, Style
-
-from harvard.storage import Storage
-from harvard.reference import BookReference, Reference, EbookReference, VitalsourceReference, ReferenceType
 from harvard.collection import Collection
+from harvard.reference import BookReference, EbookReference, Reference, ReferenceType, VitalsourceReference
+from harvard.storage import Storage
 
 class State(Enum):
     NO_COLLECTIONS = 'No collections'
@@ -22,6 +21,13 @@ class Utility:
     @staticmethod
     def print_lines(lines: list):
         for line in lines:
+            if line.startswith('@title'):
+                line = '{color_fg}{color_bg}{line}{reset_bg}{reset_fg}'.format(line = line[len('@title'):],
+                    color_fg = Fore.BLACK, color_bg = Back.WHITE, reset_bg = Back.RESET, reset_fg = Fore.RESET)
+            elif line.startswith('@subtitle'):
+                line = '{style}{line}{reset_st}'.format(line = line[len('@subtitle'):],style = Style.DIM, reset_st = Style.RESET_ALL)
+            elif line.startswith('@option'):
+                line = '{style} - {line}{reset_st}'.format(line = line[len('@option'):],style = Style.DIM, reset_st = Style.RESET_ALL)
             print(line)
 
     @staticmethod
@@ -52,10 +58,10 @@ class HandlerNoCollection(HandlerBase):
     def handle(self, _):
         Utility.print_lines([
             '',
-            ' No active collections:',
-            ' - Create [N]ew',
-            ' - [L]oad collection',
-            ' - [Q]uit',
+            '@title No active collections:',
+            '@option Create [N]ew',
+            '@option [L]oad collection',
+            '@option [Q]uit',
             ''])
         choice = Utility.prompt_user_for_input(options = ['N','L','Q'])
         return self.type_return[choice], None
@@ -67,7 +73,7 @@ class HandlerCreateNewCollection(HandlerBase):
     def handle(self, _):
         Utility.print_lines([
             '',
-            ' Create new collection:',
+            '@title Create new collection:',
             ''])
         name = Utility.prompt_user_for_input(text = 'Input name')
         description = Utility.prompt_user_for_input(text = 'Input description')
@@ -89,7 +95,7 @@ class HandlerActiveCollection(HandlerBase):
             lines = []
             options = []
             if references == []:
-                lines.append('     <empty>')
+                lines.append('@option <empty>')
             else:
                 for i, reference in enumerate(collection.references):
                     lines.append('     [{index}] : {ref}'.format(index = i, ref=reference.format_console()))
@@ -98,23 +104,32 @@ class HandlerActiveCollection(HandlerBase):
             return lines, options
         Utility.print_lines([
             '',
-            ' Collection {color}{name}{reset_color}'.format(name = collection.name, color = Fore.GREEN, reset_color=Fore.RESET),
-            '   {style}{description}{reset_style}'.format(description = collection.description, style = Style.DIM, reset_style = Style.RESET_ALL),
+            '@title {name}'.format(name = collection.name),
+            '@subtitle {description}'.format(description = collection.description),
             '',
-            '   References:',
+            '@title   References:'
             ])
         references, options = build_references(collection.references)
         Utility.print_lines(references)
-        Utility.print_lines([
-            ' Create [N]ew reference',
-            ' [E]dit reference',
-            ' [D]elete reference',
-            ' [C]lose collection',
-            ''])
-        user_input = Utility.prompt_user_for_input(options = ['N','E','D','C'])
+        lines = [
+            '@title Create [N]ew reference',
+            '@option [C]lose collection',
+            '@option EliMinate collection',
+            '']
+        options = ['N','C','M']
+        if len(collection.references) > 0:
+            lines.insert(2,'@option [E]dit reference')
+            lines.insert(3,'@option [D]elete reference')
+            options.insert(2, 'E')
+            options.insert(3, 'D')
+        Utility.print_lines(lines)
+        user_input = Utility.prompt_user_for_input(options=options)
         if user_input == 'N':
             return State.CREATE_NEW_REFERENCE, collection
         elif user_input == 'C':
+            return State.NO_COLLECTIONS, collection
+        elif user_input == 'M':
+            self.storage.delete_collection(collection)
             return State.NO_COLLECTIONS, collection
         elif user_input == 'D':
             selection = Utility.prompt_user_for_input(text='index to delete', options = list(map(str,options)))
@@ -125,7 +140,8 @@ class HandlerActiveCollection(HandlerBase):
             reference = collection.references[int(selection)]
             Utility.print_lines([
                 '',
-                ' Editing {color}{ref}{reset_color}'.format(ref = reference.format_console(), color = Fore.YELLOW, reset_color = Fore.RESET),
+                '@title Editing',
+                '@subtitle {ref}'.format(ref = reference.format_console()),
                 ''
             ])
             reference = self.type_handler[reference.type].edit(reference)
@@ -143,8 +159,12 @@ class HandlerCreateNewReference(HandlerBase):
         }
 
     def handle(self, collection: Collection):
-        Utility.print_output('Create new reference')
-        Utility.print_output('Type of reference: [B]ook, [E]book, [V]vitalsource')
+        Utility.print_lines([
+            '@title Create new reference',
+            '@option [B]ook',
+            '@option [E]book',
+            '@option [V]vitalsource'
+        ])
         user_input = Utility.prompt_user_for_input(options = ['B', 'E', 'V'])
         reference = self.type_handler[user_input].edit()
         collection.add_reference(reference)
@@ -160,10 +180,11 @@ class HandlerLoadCollection(HandlerBase):
         collections = self.storage.list_all_collections()
         Utility.print_lines([
             '',
-            ' List of collections:'])
+            '@title List of collections:'
+        ])
         if collections == []:
             Utility.print_lines([
-                ' - <empty>',
+                '@option <empty>',
                 ''])
             return State.CREATE_NEW_COLLECTION, None
         else:
@@ -171,7 +192,7 @@ class HandlerLoadCollection(HandlerBase):
                 options = []
                 lines = []
                 for i, collection_name in enumerate(collections):
-                    lines.append(' - [{index}] : {name}'.format(index = i, name = collection_name))
+                    lines.append('@option [{index}] : {name}'.format(index = i, name = collection_name))
                     options.append(str(i))
                 lines.append('')
                 return lines, options

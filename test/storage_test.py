@@ -43,5 +43,12 @@ class TestStorage(unittest.TestCase):
         db_collection = self.storage.find_collection_by_name('My Collection')
         self.assertEquals(collection, db_collection)
 
+    def test_insert_delete_collection(self):
+        collection = Collection(name = 'My Collection', description = 'My Collection')
+        self.storage.save_collection(collection)
+        self.assertEqual(1, len(self.storage.list_all_collections()))
+        self.storage.delete_collection(collection)
+        self.assertEqual(0, len(self.storage.list_all_collections()))
+
 if __name__ == '__main__':
     unittest.main()
