@@ -13,15 +13,24 @@ class TestStorage(unittest.TestCase):
         self.storage = Storage()
 
     def tearDown(self):
+        self.storage.erase_data()
         return super().tearDown()
 
-    def test_insert_select_collection(self):
+    def test_list_collections(self):
+        all = self.storage.list_all_collections()
+        self.assertEqual([], all)
+        self.storage.save_collection(Collection('my second name','my descr'))
+        self.storage.save_collection(Collection('my first name', 'my descr'))
+        all = self.storage.list_all_collections()
+        self.assertEqual(['my first name','my second name'], all)
+
+    def test_insert_find_collection(self):
         collection = Collection(name = 'My Collection', description = 'Just a test')
-        self.storage.insert_collection(collection)
-        db_collection = self.storage.select_collection_by_name('My Collection')
+        self.storage.save_collection(collection)
+        db_collection = self.storage.find_collection_by_name('My Collection')
         self.assertEqual(collection, db_collection)
 
-    def test_inser_select_reference(self):
+    def test_insert_find_reference(self):
         reference = BookReference(
             authors = 'Armstrong, G., Kotler, P. & Opresnik, O.',
             year = '2016',
@@ -29,12 +38,10 @@ class TestStorage(unittest.TestCase):
             edition = '13th',
             place = 'Harlow',
             publisher = 'Pearson Education Limited')
-        collection = Collection(name = 'My Collection', description = 'My Collection')
-        self.storage.insert_collection(collection)
-        self.storage.insert_reference(collection, reference)
-        db_references = self.storage.select_references_by_collection(collection)
-        self.assertEquals(1,len(db_references))
-        self.assertEquals(reference, db_references[0])
+        collection = Collection(name = 'My Collection', description = 'My Collection', references = [reference])
+        self.storage.save_collection(collection)
+        db_collection = self.storage.find_collection_by_name('My Collection')
+        self.assertEquals(collection, db_collection)
 
 if __name__ == '__main__':
     unittest.main()

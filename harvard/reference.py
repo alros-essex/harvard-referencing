@@ -67,6 +67,12 @@ class BookReference(Reference):
                 place = self.place,
                 publisher = self.publisher)
 
+    def __eq__(self, o: object) -> bool:
+        if not isinstance(o, BookReference):
+            return False
+        other: BookReference = o
+        return super().__eq__(o) and other.volume == self.volume and other.edition == self.edition and other.place == self.place and other.publisher == self.publisher
+
 class EbookReference(Reference):
 
     def __init__(self, authors: str, year: str, title: str, 
