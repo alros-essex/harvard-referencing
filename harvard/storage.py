@@ -23,7 +23,7 @@ class Storage:
     def __save(self, filename:str, data) -> None:
         with open('{path}/{file}'.format(path = Storage.__base_path, file = filename), "wb") as f:
             pickle.dump(data, f)
-            
+
     def __load_collection(self, collection_name:str) -> Collection:
         return self.__load('{collection}.bin'.format(collection = collection_name))
             
@@ -31,7 +31,7 @@ class Storage:
         self.__save('{collection}.bin'.format(collection = collection.name), collection)
 
     def list_all_collections(self):
-        files:list = os.listdir(Storage.__base_path)
+        files = os.listdir(Storage.__base_path)
         def split(filename:str):
             return filename[0:filename.rfind(".")]
         names = list(map(split, files))
