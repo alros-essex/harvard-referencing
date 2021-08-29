@@ -1,4 +1,3 @@
-from PySimpleGUI.PySimpleGUI import Col
 from .collection import Collection
 from .reference import Reference
 

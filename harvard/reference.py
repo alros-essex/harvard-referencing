@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Collection
 
 class ReferenceType(Enum):
     BOOK = 'book'
