@@ -1,3 +1,4 @@
+from typing import NamedTuple
 from harvard.collection import Collection
 from harvard.reference import BookReference
 from harvard.reference import EbookReference
