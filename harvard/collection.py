@@ -13,5 +13,4 @@ class Collection():
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Collection):
             return False
-        other: Collection = o
         return o.name == self.name and o.description == self.description and o.references == self.references
