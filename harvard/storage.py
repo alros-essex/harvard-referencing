@@ -1,8 +1,6 @@
 from .collection import Collection
 from .reference import Reference
 
-from typing import List
-
 class Storage:
 
     def __init__(self):
@@ -11,7 +9,7 @@ class Storage:
     def insert_collection(self, collection: Collection) -> None:
         self.__collections[collection.name] = { "collection": collection, "references": [] }
 
-    def select_all_collections(self) -> List[str]:
+    def select_all_collections(self):
         return list(self.__collections.keys())
 
     def select_collection_by_name(self, name: str) -> Collection:
@@ -23,7 +21,7 @@ class Storage:
         entry["references"].append(reference)
             
 
-    def select_references_by_collection(self, collection: Collection) -> List[Reference]:
+    def select_references_by_collection(self, collection: Collection):
         if(collection is None):
             return None
         entry = self.__collections[collection.name]
