@@ -6,22 +6,21 @@ from .reference import Reference
 
 class Storage:
 
-    __base_path = './harvard_collections_data'
-
-    def __init__(self):
+    def __init__(self, base_path = './harvard_collections_data'):
+        self.__base_path = base_path
         self.__init_storage()
 
     def __init_storage(self) -> None:
-        if not os.path.isdir(Storage.__base_path):
-            os.mkdir(Storage.__base_path)
+        if not os.path.isdir(self.__base_path):
+            os.mkdir(self.__base_path)
 
     def __load(self, filename:str):
-        with open('{path}/{filename}'.format(path = Storage.__base_path, filename = filename), "rb") as f:
+        with open('{path}/{filename}'.format(path = self.__base_path, filename = filename), "rb") as f:
             data = pickle.load(f)
         return data
 
     def __save(self, filename:str, data) -> None:
-        with open('{path}/{file}'.format(path = Storage.__base_path, file = filename), "wb") as f:
+        with open('{path}/{file}'.format(path = self.__base_path, file = filename), "wb") as f:
             pickle.dump(data, f)
 
     def __load_collection(self, collection_name:str) -> Collection:
@@ -31,7 +30,7 @@ class Storage:
         self.__save('{collection}.bin'.format(collection = collection.name), collection)
 
     def list_all_collections(self):
-        files = os.listdir(Storage.__base_path)
+        files = os.listdir(self.__base_path)
         def split(filename:str):
             return filename[0:filename.rfind(".")]
         names = list(map(split, files))
@@ -42,6 +41,6 @@ class Storage:
         return self.__load_collection(name)          
 
     def erase_data(self):
-        for file in os.listdir(Storage.__base_path):
-            os.remove('{path}/{file}'.format(path = Storage.__base_path, file = file))
-        os.rmdir(Storage.__base_path)
+        for file in os.listdir(self.__base_path):
+            os.remove('{path}/{file}'.format(path = self.__base_path, file = file))
+        os.rmdir(self.__base_path)

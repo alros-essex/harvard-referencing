@@ -10,7 +10,7 @@ from harvard.storage import Storage
 class TestStorage(unittest.TestCase):
 
     def setUp(self):
-        self.storage = Storage()
+        self.storage = Storage('./harvard_collections_data_test')
 
     def tearDown(self):
         self.storage.erase_data()

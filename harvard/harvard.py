@@ -9,6 +9,7 @@ class State(Enum):
     CREATE_NEW_COLLECTION = 'Create new collection'
     ACTIVE_COLLECTION = 'Active collection'
     CREATE_NEW_REFERENCE = 'Create new reference'
+    LOAD_COLLECTION = 'Load collection'
     EXIT = 'EXIT'
 
 class Utility:
@@ -31,7 +32,6 @@ class HandlerBase():
     def __init__(self, storage: Storage):
         self.storage = storage
 
-
 class HandlerNoCollection(HandlerBase):
 
     def __init__(self,storage: Storage):
@@ -40,10 +40,10 @@ class HandlerNoCollection(HandlerBase):
     def handle(self, _):
         Utility.print_output('No active collections:')
         Utility.print_output('- Create [N]ew')
-        choice = Utility.prompt_user_for_input(options = ['N'])
-        return State.CREATE_NEW_COLLECTION if choice == 'N' else State.EXIT, None
+        Utility.print_output('- [L]oad collection')
+        choice = Utility.prompt_user_for_input(options = ['N','L'])
+        return State.CREATE_NEW_COLLECTION if choice == 'N' else State.LOAD_COLLECTION, None
         
-
 class HandlerCreateNewCollection(HandlerBase):
     def __init__(self,storage: Storage):
         super().__init__(storage)
@@ -53,10 +53,8 @@ class HandlerCreateNewCollection(HandlerBase):
         name = Utility.prompt_user_for_input(text = 'Input name')
         description = Utility.prompt_user_for_input(text = 'Input description')
         collection = Collection(name = name, description = description)
-        self.storage.insert_collection(collection = collection)
+        self.storage.save_collection(collection)
         return State.ACTIVE_COLLECTION, collection
-
-
 
 class HandlerActiveCollection(HandlerBase):
     def __init__(self,storage: Storage):
@@ -65,14 +63,12 @@ class HandlerActiveCollection(HandlerBase):
     def handle(self, collection: Collection):
         Utility.print_output('Collection {name}'.format(name = collection.name))
         Utility.print_output('  {description}'.format(description = collection.description))
-        references = self.storage.select_references_by_collection(collection)
         Utility.print_output('References')
-        if references is None:
-            Utility.print_output('<none>')
+        if collection.references == []:
+            Utility.print_output(' <empty>')
         else:
-            for reference in references:
-                Utility.print_output(reference.format_console())
-        Utility.print_output('')
+            for i, reference in enumerate(collection.references):
+                Utility.print_output(' [{index}] : {ref}'.format(index = i, ref=reference.format_console()))
         Utility.print_output('Create [N]ew reference')
         user_input = Utility.prompt_user_for_input(options = ['N'])
         return State.CREATE_NEW_REFERENCE if user_input == 'N' else State.EXIT, collection
@@ -92,9 +88,29 @@ class HandlerCreateNewReference(HandlerBase):
         Utility.print_output('Type of reference: [B]ook, [E]book, [V]vitalsource')
         user_input = Utility.prompt_user_for_input(options = ['B', 'E', 'V'])
         reference = self.type_handler[user_input].edit()
-        self.storage.insert_reference(collection, reference)
+        collection.add_reference(reference)
+        self.storage.save_collection(collection)
         return State.ACTIVE_COLLECTION, collection
 
+class HandlerLoadCollection(HandlerBase):
+    
+    def __init__(self,storage: Storage):
+        super().__init__(storage)
+
+    def handle(self, _):
+        collections = self.storage.list_all_collections()
+        Utility.print_output('List of collections:')
+        if collections == []:
+            Utility.print_output(' <empty>')
+            return State.CREATE_NEW_COLLECTION, None
+        else:
+            options = []
+            for i, collection_name in enumerate(collections):
+                Utility.print_output(' [{index}] : {name}'.format(index = i, name = collection_name))
+                options.append(str(i))
+            selected = Utility.prompt_user_for_input(options=options)
+            collection = self.storage.find_collection_by_name(collections[int(selected)])
+            return State.ACTIVE_COLLECTION, collection
 
 class EditReference():
 
@@ -122,7 +138,6 @@ class EditBookReference(EditReference):
             values['volume'],
             values['edition'])
 
-
 class EditEbookReference(EditReference):
 
     def edit(self, reference: EbookReference = None):
@@ -141,7 +156,6 @@ class EditEbookReference(EditReference):
             values['url'],
             values['last_access'],
             values['edition'])
-
 
 class EditVitalsourceReference(EditReference):
 
@@ -171,7 +185,8 @@ class Console:
             State.NO_COLLECTIONS: HandlerNoCollection(self.storage),
             State.CREATE_NEW_COLLECTION: HandlerCreateNewCollection(self.storage),
             State.ACTIVE_COLLECTION: HandlerActiveCollection(self.storage),
-            State.CREATE_NEW_REFERENCE: HandlerCreateNewReference(self.storage)
+            State.CREATE_NEW_REFERENCE: HandlerCreateNewReference(self.storage),
+            State.LOAD_COLLECTION: HandlerLoadCollection(self.storage)
         }
 
     def loop(self):
