@@ -1,7 +1,9 @@
 from enum import Enum
 
+from colorama import Fore, Back, Style
+
 from harvard.storage import Storage
-from harvard.reference import BookReference, Reference, EbookReference, VitalsourceReference
+from harvard.reference import BookReference, Reference, EbookReference, VitalsourceReference, ReferenceType
 from harvard.collection import Collection
 
 class State(Enum):
@@ -16,16 +18,21 @@ class Utility:
     @staticmethod
     def print_output(data: str):
         print(data)
+    
+    @staticmethod
+    def print_lines(lines: list):
+        for line in lines:
+            print(line)
 
     @staticmethod
-    def prompt_user_for_input(text: str = None, options = None, collection: str = None) -> str:
+    def prompt_user_for_input(text: str = None, options = None) -> str:
         while True:
-            prompt = '{collection}@harvard § '.format(collection= collection) if text is None else '{text} > '.format(text=text)
-            user_input = input(prompt)
+            user_input = input('{prompt} > '.format(prompt = text if text is not None else options if options is not None else ''))
             if options is None or user_input in options:
                 return user_input if user_input != '' else None
             else:
-                print('Err. valid options are {options}'.format(options = options))
+                print('{color}Err. valid options are {options}{reset_fore}'.format(
+                    color=Fore.RED, options = options, reset_fore = Fore.RESET))
 
 class HandlerBase():
 
@@ -36,20 +43,32 @@ class HandlerNoCollection(HandlerBase):
 
     def __init__(self,storage: Storage):
         super().__init__(storage)
+        self.type_return = {
+            'N': State.CREATE_NEW_COLLECTION,
+            'Q': State.EXIT,
+            'L': State.LOAD_COLLECTION
+        }
 
     def handle(self, _):
-        Utility.print_output('No active collections:')
-        Utility.print_output('- Create [N]ew')
-        Utility.print_output('- [L]oad collection')
-        choice = Utility.prompt_user_for_input(options = ['N','L'])
-        return State.CREATE_NEW_COLLECTION if choice == 'N' else State.LOAD_COLLECTION, None
+        Utility.print_lines([
+            '',
+            ' No active collections:',
+            ' - Create [N]ew',
+            ' - [L]oad collection',
+            ' - [Q]uit',
+            ''])
+        choice = Utility.prompt_user_for_input(options = ['N','L','Q'])
+        return self.type_return[choice], None
         
 class HandlerCreateNewCollection(HandlerBase):
     def __init__(self,storage: Storage):
         super().__init__(storage)
 
     def handle(self, _):
-        Utility.print_output('Create new collection:')
+        Utility.print_lines([
+            '',
+            ' Create new collection:',
+            ''])
         name = Utility.prompt_user_for_input(text = 'Input name')
         description = Utility.prompt_user_for_input(text = 'Input description')
         collection = Collection(name = name, description = description)
@@ -59,19 +78,59 @@ class HandlerCreateNewCollection(HandlerBase):
 class HandlerActiveCollection(HandlerBase):
     def __init__(self,storage: Storage):
         super().__init__(storage)
+        self.type_handler = {
+            ReferenceType.BOOK: EditBookReference(),
+            ReferenceType.EBOOK: EditEbookReference(),
+            ReferenceType.VITALSOURCE: EditVitalsourceReference()
+        }
 
     def handle(self, collection: Collection):
-        Utility.print_output('Collection {name}'.format(name = collection.name))
-        Utility.print_output('  {description}'.format(description = collection.description))
-        Utility.print_output('References')
-        if collection.references == []:
-            Utility.print_output(' <empty>')
+        def build_references(references):
+            lines = []
+            options = []
+            if references == []:
+                lines.append('     <empty>')
+            else:
+                for i, reference in enumerate(collection.references):
+                    lines.append('     [{index}] : {ref}'.format(index = i, ref=reference.format_console()))
+                    options.append(i)
+            lines.append('')
+            return lines, options
+        Utility.print_lines([
+            '',
+            ' Collection {color}{name}{reset_color}'.format(name = collection.name, color = Fore.GREEN, reset_color=Fore.RESET),
+            '   {style}{description}{reset_style}'.format(description = collection.description, style = Style.DIM, reset_style = Style.RESET_ALL),
+            '',
+            '   References:',
+            ])
+        references, options = build_references(collection.references)
+        Utility.print_lines(references)
+        Utility.print_lines([
+            ' Create [N]ew reference',
+            ' [E]dit reference',
+            ' [D]elete reference',
+            ' [C]lose collection',
+            ''])
+        user_input = Utility.prompt_user_for_input(options = ['N','E','D','C'])
+        if user_input == 'N':
+            return State.CREATE_NEW_REFERENCE, collection
+        elif user_input == 'C':
+            return State.NO_COLLECTIONS, collection
+        elif user_input == 'D':
+            selection = Utility.prompt_user_for_input(text='index to delete', options = list(map(str,options)))
+            collection.references(int(selection))
+            return State.ACTIVE_COLLECTION, collection
         else:
-            for i, reference in enumerate(collection.references):
-                Utility.print_output(' [{index}] : {ref}'.format(index = i, ref=reference.format_console()))
-        Utility.print_output('Create [N]ew reference')
-        user_input = Utility.prompt_user_for_input(options = ['N'])
-        return State.CREATE_NEW_REFERENCE if user_input == 'N' else State.EXIT, collection
+            selection = Utility.prompt_user_for_input(text = 'select the index of the reference', options = list(map(str,options)))
+            reference = collection.references[int(selection)]
+            Utility.print_lines([
+                '',
+                ' Editing {color}{ref}{reset_color}'.format(ref = reference.format_console(), color = Fore.YELLOW, reset_color = Fore.RESET),
+                ''
+            ])
+            reference = self.type_handler[reference.type].edit(reference)
+            collection.references[int(selection)] = reference
+            return State.ACTIVE_COLLECTION, collection
 
 class HandlerCreateNewReference(HandlerBase):
 
@@ -99,15 +158,25 @@ class HandlerLoadCollection(HandlerBase):
 
     def handle(self, _):
         collections = self.storage.list_all_collections()
-        Utility.print_output('List of collections:')
+        Utility.print_lines([
+            '',
+            ' List of collections:'])
         if collections == []:
-            Utility.print_output(' <empty>')
+            Utility.print_lines([
+                ' - <empty>',
+                ''])
             return State.CREATE_NEW_COLLECTION, None
         else:
-            options = []
-            for i, collection_name in enumerate(collections):
-                Utility.print_output(' [{index}] : {name}'.format(index = i, name = collection_name))
-                options.append(str(i))
+            def build_references():
+                options = []
+                lines = []
+                for i, collection_name in enumerate(collections):
+                    lines.append(' - [{index}] : {name}'.format(index = i, name = collection_name))
+                    options.append(str(i))
+                lines.append('')
+                return lines, options
+            lines, options = build_references()
+            Utility.print_lines(lines)
             selected = Utility.prompt_user_for_input(options=options)
             collection = self.storage.find_collection_by_name(collections[int(selected)])
             return State.ACTIVE_COLLECTION, collection
@@ -116,19 +185,26 @@ class EditReference():
 
     def edit(self, reference: Reference):
         values = {}
-        values['authors'] = Utility.prompt_user_for_input('Authors ({current})'.format(current = '<empty>' if reference is None else reference.authors))
-        values['year'] = Utility.prompt_user_for_input('Year ({current})'.format(current = '<empty>' if reference is None else reference.year))
-        values['title'] = Utility.prompt_user_for_input('Title ({current})'.format(current = '<empty>' if reference is None else reference.title))
+        values['authors'] = self.prompt_user_for_input('Authors', reference.authors)
+        values['year'] = self.prompt_user_for_input('Year', reference.year)
+        values['title'] = self.prompt_user_for_input('Title', reference.title)
         return values
+
+    def prompt_user_for_input(self, label: str, current: str = None):
+        if current is None:
+            return Utility.prompt_user_for_input('{label}: '.format(label = label))
+        else:
+            value = Utility.prompt_user_for_input('{label} [{current}]: '.format(label = label, current = current))
+            return value if value is not None else current
 
 class EditBookReference(EditReference):
 
     def edit(self, reference: BookReference = None):
         values = super().edit(reference)
-        values['volume'] = Utility.prompt_user_for_input('Volume ({current})'.format(current = '<empty>' if reference is None else reference.volume))
-        values['edition'] = Utility.prompt_user_for_input('Edition ({current})'.format(current = '<empty>' if reference is None else reference.edition))
-        values['place'] = Utility.prompt_user_for_input('Place ({current})'.format(current = '<empty>' if reference is None else reference.place))
-        values['publisher'] = Utility.prompt_user_for_input('Publisher ({current})'.format(current = '<empty>' if reference is None else reference.publisher))
+        values['volume'] = self.prompt_user_for_input('Volume', reference.volume)
+        values['edition'] = self.prompt_user_for_input('Edition', reference.edition)
+        values['place'] = self.prompt_user_for_input('Place', reference.place)
+        values['publisher'] = self.prompt_user_for_input('Publisher', reference.publisher)
         return BookReference(
             values['authors'],
             values['year'],
@@ -142,11 +218,11 @@ class EditEbookReference(EditReference):
 
     def edit(self, reference: EbookReference = None):
         values = super().edit(reference)
-        values['edition'] = Utility.prompt_user_for_input('Edition ({current})'.format(current = '<empty>' if reference is None else reference.edition))
-        values['place'] = Utility.prompt_user_for_input('Place ({current})'.format(current = '<empty>' if reference is None else reference.place))
-        values['publisher'] = Utility.prompt_user_for_input('Publisher ({current})'.format(current = '<empty>' if reference is None else reference.publisher))
-        values['url'] = Utility.prompt_user_for_input('Url ({current})'.format(current = '<empty>' if reference is None else reference.url))
-        values['last_access'] = Utility.prompt_user_for_input('Last accessed ({current})'.format(current = '<empty>' if reference is None else reference.last_access))
+        values['edition'] = self.prompt_user_for_input('Edition', reference.edition)
+        values['place'] = self.prompt_user_for_input('Place', reference.place)
+        values['publisher'] = self.prompt_user_for_input('Publisher', reference.publisher)
+        values['url'] = self.prompt_user_for_input('Url', reference.url)
+        values['last_access'] = self.prompt_user_for_input('Last accessed', reference.last_access)
         return EbookReference(
             values['authors'],
             values['year'],
@@ -161,10 +237,10 @@ class EditVitalsourceReference(EditReference):
 
     def edit(self, reference: VitalsourceReference = None):
         values = super().edit(reference)
-        values['edition'] = Utility.prompt_user_for_input('Edition ({current})'.format(current = '<empty>' if reference is None else reference.edition))
-        values['place'] = Utility.prompt_user_for_input('Place ({current})'.format(current = '<empty>' if reference is None else reference.place))
-        values['publisher'] = Utility.prompt_user_for_input('Publisher ({current})'.format(current = '<empty>' if reference is None else reference.publisher))
-        values['last_access'] = Utility.prompt_user_for_input('Last accessed ({current})'.format(current = '<empty>' if reference is None else reference.last_access))
+        values['edition'] = self.prompt_user_for_input('Edition', reference.edition)
+        values['place'] = self.prompt_user_for_input('Place', reference.place)
+        values['publisher'] = self.prompt_user_for_input('Publisher', reference.publisher)
+        values['last_access'] = self.prompt_user_for_input('Last accessed', reference.last_access)
         return VitalsourceReference(
             values['authors'],
             values['year'],
