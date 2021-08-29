@@ -1,4 +1,4 @@
-from harvard.harvard import main
+from harvard.harvard_gui import main
 
 if __name__ == "__main__":
     main()
