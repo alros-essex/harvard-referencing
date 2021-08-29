@@ -37,6 +37,11 @@ class Reference():
     def format_optional(self, value, prefix=' ', suffix='', default=''):
         return default if value is None else prefix + value + suffix
 
+    def __eq__(self, o: object) -> bool:
+        if not isinstance(o, Reference):
+            return False
+        return o.type == self.type and o.authors == self.authors and o.year == self.year and o.title == self.title
+
 class BookReference(Reference):
 
     def __init__(self, authors:str, year:str, title:str, 
@@ -70,8 +75,7 @@ class BookReference(Reference):
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, BookReference):
             return False
-        other: BookReference = o
-        return super().__eq__(o) and other.volume == self.volume and other.edition == self.edition and other.place == self.place and other.publisher == self.publisher
+        return super().__eq__(o) and o.volume == self.volume and o.edition == self.edition and o.place == self.place and o.publisher == self.publisher
 
 class EbookReference(Reference):
 
@@ -109,6 +113,11 @@ class EbookReference(Reference):
                 url = self.url,
                 last_access = self.last_access)
 
+    def __eq__(self, o: object) -> bool:
+        if not isinstance(o, EbookReference):
+            return False
+        return super().__eq__(o) and o.edition == self.edition and o.place == self.place and o.publisher == self.publisher and o.url == self.url and o.last_access == self.last_access
+
 class VitalsourceReference(Reference):
 
     def __init__(self, authors: str, year: str, title: str,
@@ -139,3 +148,8 @@ class VitalsourceReference(Reference):
             place = self.place,
             publisher = self.publisher,
             last_access = self.last_access)
+
+    def __eq__(self, o: object) -> bool:
+        if not isinstance(o, VitalsourceReference):
+            return False
+        return super().__eq__(o) and o.edition == self.edition and o.place == self.place and o.publisher == self.publisher and o.last_access == self.last_access
