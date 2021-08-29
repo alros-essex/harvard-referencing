@@ -6,7 +6,7 @@ class Collection():
     def __init__(self, name:str, description:str):
         self.name = name
         self.description = description
-        self.references: List[Reference] = []
+        self.references: List = []
     
 
 #    def __eq__(self, o: object) -> bool:
