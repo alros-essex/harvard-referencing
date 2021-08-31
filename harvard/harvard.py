@@ -1,3 +1,5 @@
+import abc
+import enum
 from colorama import Fore, Back, Style
 from enum import Enum
 
@@ -14,12 +16,12 @@ class State(Enum):
     EDIT_REFERENCE = 'Edit reference'
     DELETE_REFERENCE = 'Delete reference'
     DELETE_COLLECTION = 'Delete collection'
+    SEARCH = 'Search'
+    SEARCH_BY_AUTHOR = 'Search by author'
+    SEARCH_BY_TITLE = 'Search by title'
     EXIT = 'EXIT'
 
 class Utility:
-    @staticmethod
-    def print_output(data: str):
-        print(data)
     
     @staticmethod
     def print_lines(lines: list):
@@ -34,6 +36,9 @@ class Utility:
                     line = '{style}{line}{reset_st}'.format(line = line[len('@subtitle'):],style = Style.DIM, reset_st = Style.RESET_ALL)
                 elif line.startswith('@option'):
                     line = '{style} - {line}{reset_st}'.format(line = line[len('@option'):],style = Style.DIM, reset_st = Style.RESET_ALL)
+                elif line.startswith('@warning'):
+                    line = '{color_fg}{color_bg}{line}{reset_bg}{reset_fg}'.format(line = line[len('@title'):],
+                        color_fg = Fore.YELLOW, color_bg = Back.RED, reset_bg = Back.RESET, reset_fg = Fore.RESET)
                 print(line)
 
     @staticmethod
@@ -51,6 +56,10 @@ class HandlerBase():
     def __init__(self, storage: Storage):
         self.storage = storage
 
+    @abc.abstractmethod
+    def handle(self, option):
+        pass
+
 class HandlerNoCollection(HandlerBase):
 
     def __init__(self,storage: Storage):
@@ -58,7 +67,8 @@ class HandlerNoCollection(HandlerBase):
         self.type_return = {
             'N': State.CREATE_NEW_COLLECTION,
             'Q': State.EXIT,
-            'L': State.LOAD_COLLECTION
+            'L': State.LOAD_COLLECTION,
+            'S': State.SEARCH
         }
 
     def handle(self, _):
@@ -67,9 +77,10 @@ class HandlerNoCollection(HandlerBase):
             '@title No active collections:',
             '@option Create [N]ew',
             '@option [L]oad collection',
+            '@option [S]earch',
             '@option [Q]uit',
             ''])
-        choice = Utility.prompt_user_for_input(options = ['N','L','Q'])
+        choice = Utility.prompt_user_for_input(options = ['N','L','S','Q'])
         return self.type_return[choice], None
         
 class HandlerCreateNewCollection(HandlerBase):
@@ -237,9 +248,86 @@ class HandlerDeleteCollection(HandlerBase):
     def __init__(self, storage: Storage):
         super().__init__(storage)
 
-    def handle(self, collection):
-        self.storage.delete_collection(collection)
-        return State.NO_COLLECTIONS, None
+    def handle(self, collection:Collection):
+        Utility.print_lines([
+            '',
+            '@warning Do you want to delete collection?',
+            ''
+            ])
+        choice = Utility.prompt_user_for_input(options=['Y','N'])
+        if choice == 'Y':
+            self.storage.delete_collection(collection)
+            return State.NO_COLLECTIONS, None
+        else:
+            return State.ACTIVE_COLLECTION, collection
+
+class HandlerSearchCollection(HandlerBase):
+
+    def __init__(self, storage: Storage):
+        super().__init__(storage)
+        self.handle_choice = {
+            'A': State.SEARCH_BY_AUTHOR,
+            'T': State.SEARCH_BY_TITLE
+        }
+
+    def handle(self, _):
+        Utility.print_lines([
+            '',
+            '@title Search',
+            '@option [A]uthor',
+            '@option [T]itle',
+            ''
+            ])
+        choice = Utility.prompt_user_for_input(options = ['A','T'])
+        return self.handle_choice[choice], None
+
+class HandlerSearchCollectionByField(HandlerBase):
+    def __init__(self, storage: Storage):
+        super().__init__(storage)
+
+    @abc.abstractclassmethod
+    def _reference_matches(self, reference: Reference, parameter: str) -> bool:
+        pass
+
+    @abc.abstractclassmethod
+    def _prompt(self) -> str:
+        pass
+
+    def handle(self, _):
+        parameter = Utility.prompt_user_for_input(text = self._prompt())
+        found = []
+        for collection_name in self.storage.list_all_collections():
+            collection = self.storage.find_collection_by_name(collection_name)
+            for reference in collection.references:
+                if self._reference_matches(reference, parameter):
+                    found.append((reference.format_console(),collection_name))
+        Utility.print_lines([
+            '',
+            '@title Search result:',
+            ['  [{i}] {ref} -> in collection: {col}'.format(i=i, ref=tpl[0], col=tpl[1]) for i, tpl in enumerate(found)],
+            ''])
+        choice = Utility.prompt_user_for_input(text = 'Open collection', options = [str(i) for i,_ in enumerate(found)])
+        return State.ACTIVE_COLLECTION, self.storage.find_collection_by_name(found[int(choice)][1])
+    
+
+class HandlerSearchCollectionByAuthor(HandlerSearchCollectionByField):
+
+    def __init__(self, storage: Storage):
+        super().__init__(storage)
+
+    def _reference_matches(self, reference: Reference, authors: str) -> bool:
+        return authors in reference.authors
+
+    def _prompt(self) -> str:
+        return '(Partial) Author\'s name'
+
+class HandlerSearchCollectionByTitle(HandlerBase):
+    
+    def __init__(self, storage: Storage):
+        super().__init__(storage)
+
+    def handle(self, _):
+        pass
 
 class EditReference():
 
@@ -325,7 +413,10 @@ class Console:
             State.LOAD_COLLECTION: HandlerLoadCollection(self.storage),
             State.EDIT_REFERENCE: HandlerEditReference(self.storage),
             State.DELETE_REFERENCE: HandlerDeleteReference(self.storage),
-            State.DELETE_COLLECTION: HandlerDeleteCollection(self.storage)
+            State.DELETE_COLLECTION: HandlerDeleteCollection(self.storage),
+            State.SEARCH: HandlerSearchCollection(self.storage),
+            State.SEARCH_BY_AUTHOR: HandlerSearchCollectionByAuthor(self.storage),
+            State.SEARCH_BY_TITLE: HandlerSearchCollectionByTitle(self.storage)
         }
 
     def loop(self):
