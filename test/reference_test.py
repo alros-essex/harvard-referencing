@@ -1,5 +1,8 @@
 from harvard.collection import Collection
-from harvard.reference import *
+from harvard.reference_book import BookReference
+from harvard.reference_ebook import EbookReference
+from harvard.reference_chapter import ChapterEditedBookReference
+from harvard.reference_vitalsource import VitalsourceReference
 
 import unittest
 

@@ -3,6 +3,10 @@ import os
 
 from .collection import Collection
 from .reference import Reference
+from .reference_book import BookReference
+from .reference_ebook import EbookReference
+from .reference_chapter import ChapterEditedBookReference
+from .reference_vitalsource import VitalsourceReference
 
 class Storage:
 
