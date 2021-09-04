@@ -4,6 +4,23 @@ from harvard.collection import Collection
 from harvard.edit_reference import *
 from harvard.state import State
 from harvard.utility import Utility
+from harvard.edit_chapter import EditChapterReference
+from harvard.edit_conference import EditConferencePapersReference
+from harvard.edit_correspondence import EditCorrespondenceReference
+from harvard.edit_journal import EditJournalReference
+from harvard.edit_journal_online import EditJournalOnlineReference
+from harvard.edit_lecture import EditLectureReference
+from harvard.edit_newspaper import EditNewspaperReference
+from harvard.edit_newspaper_online import EditNewspaperOnlineReference
+from harvard.edit_reference import EditReference
+from harvard.edit_reference_book import EditBookReference
+from harvard.edit_reference_ebook import EditEbookReference
+from harvard.edit_report import EditResearchReportReference
+from harvard.edit_report_online import EditResearchReportOnlineReference
+from harvard.edit_treaty import EditTreatyResolution
+from harvard.edit_un_resolution  import EditUNResolutions
+from harvard.edit_vitalsource   import EditVitalsourceReference
+from harvard.edit_website  import EditWebsiteReference
 
 class HandlerCreateNewReference(HandlerBase):
 
@@ -27,7 +44,6 @@ class HandlerCreateNewReference(HandlerBase):
             'U': EditUNResolutions(),
             'T': EditTreatyResolution()
         }
-
 
     def handle(self, collection: Collection):
         Utility.print_lines([
