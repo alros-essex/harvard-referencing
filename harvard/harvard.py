@@ -141,7 +141,7 @@ class HandlerActiveCollection(HandlerBase):
         lines = [
             '@option Create [N]ew reference',
             '@option [C]lose collection',
-            '@option EliMinate collection',
+            '@option Eli[M]inate collection',
             '']
         options = ['N','C','M']
         if len(references) > 0:
@@ -309,7 +309,6 @@ class HandlerSearchCollectionByField(HandlerBase):
         choice = Utility.prompt_user_for_input(text = 'Open collection', options = [str(i) for i,_ in enumerate(found)])
         return State.ACTIVE_COLLECTION, self.storage.find_collection_by_name(found[int(choice)][1])
     
-
 class HandlerSearchCollectionByAuthor(HandlerSearchCollectionByField):
 
     def __init__(self, storage: Storage):
