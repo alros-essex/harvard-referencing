@@ -12,17 +12,34 @@ class HandlerCreateNewReference(HandlerBase):
         self.type_handler = {
             'B': EditBookReference(),
             'E': EditEbookReference(),
-            'V': EditVitalsourceReference()
+            'C': EditChapterReference(),
+            'V': EditVitalsourceReference(),
+            'J': EditJournalReference(),
+            'O': EditJournalOnlineReference(),
+            'W': EditWebsiteReference(),
+            'N': EditNewspaperReference(),
+            'S': EditNewspaperOnlineReference(),
+            'R': EditResearchReportReference(),
+            'A': EditResearchReportOnlineReference()
         }
+
 
     def handle(self, collection: Collection):
         Utility.print_lines([
             '@title Create new reference',
             '@option [B]ook',
             '@option [E]book',
-            '@option [V]vitalsource'
+            '@option [C]hapter in edited book',
+            '@option [V]vitalsource',
+            '@option [J]ournal article',
+            '@option J[O]urnal article online',
+            '@option [W]ebsite',
+            '@option [N]ewspaper article',
+            '@option New[S]paer article online',
+            '@option [R]esearch report',
+            '@option Rese[A]rch report online'
         ])
-        user_input = Utility.prompt_user_for_input(options = ['B', 'E', 'V'])
+        user_input = Utility.prompt_user_for_input(options = ['B', 'E', 'C', 'V', 'J', 'O', 'W', 'N', 'S', 'R', 'A'])
         reference = self.type_handler[user_input].edit()
         collection.add_reference(reference)
         self.storage.save_collection(collection)

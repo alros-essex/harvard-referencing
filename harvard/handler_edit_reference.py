@@ -11,7 +11,15 @@ class HandlerEditReference(HandlerBase):
         self.type_handler = {
             ReferenceType.BOOK: EditBookReference(),
             ReferenceType.EBOOK: EditEbookReference(),
-            ReferenceType.VITALSOURCE: EditVitalsourceReference()
+            ReferenceType.CHAPTER_IN_EDITED_BOOK: EditChapterReference(),
+            ReferenceType.VITALSOURCE: EditVitalsourceReference(),
+            ReferenceType.JOURNAL_ARTICLE: EditJournalReference(),
+            ReferenceType.JOURNAL_ARTICLE_ONLINE: EditJournalOnlineReference(),
+            ReferenceType.WEBSITE: EditWebsiteReference(),
+            ReferenceType.NEWSPAPER_ARTICLE: EditNewspaperReference(),
+            ReferenceType.ELECTRONIC_NEWSPAPER_ARTICLE: EditNewspaperOnlineReference(),
+            ReferenceType.RESEARCH_REPORT: EditResearchReportReference(),
+            ReferenceType.RESEARCH_REPORT_ONLINE: EditResearchReportOnlineReference()
         }
 
     def handle(self, data):
