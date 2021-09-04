@@ -4,6 +4,20 @@ class Utility:
     
     @staticmethod
     def print_lines(lines: list):
+        """
+        Simple engine that prints formatted lines.
+        
+        Valid arguments are
+        * a list of strings
+        * a list of arrays of strings
+        * a mix of the above
+
+        Formatting options: prepend the line with a tag to format it automatically
+        * @title: highlighted line
+        * @subtitle: dimmed line
+        * @option: intended dimmed line, part of a list
+        * @warning: highlighted line with a red background
+        """
         for line in lines:
             if isinstance(line, list):
                 Utility.print_lines(line)
@@ -22,6 +36,12 @@ class Utility:
 
     @staticmethod
     def prompt_user_for_input(text: str = None, options = None) -> str:
+        """
+        Utility method to get an option
+
+        text: optional label. If absent options is printed instead
+        options: array of accepted inputs. If specified, the user can only input one of the values
+        """
         while True:
             user_input = input('{prompt} > '.format(prompt = text if text is not None else options if options is not None else ''))
             if options is None or user_input in options:

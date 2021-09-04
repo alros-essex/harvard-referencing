@@ -1,6 +1,3 @@
-import abc
-from harvard.storage import Storage
-
 from harvard.handler_active_collection import HandlerActiveCollection
 from harvard.handler_create_collection import HandlerCreateNewCollection
 from harvard.handler_create_reference import HandlerCreateNewReference
@@ -12,9 +9,13 @@ from harvard.handler_no_collection import HandlerNoCollection
 from harvard.handler_search import HandlerSearchCollection
 from harvard.handler_search_by_author import HandlerSearchCollectionByAuthor
 from harvard.handler_search_by_title import HandlerSearchCollectionByTitle
+from harvard.storage import Storage
 from harvard.state import State
 
 class Console:
+    """
+    application interface
+    """
 
     def __init__(self):
         self.state = State.NO_COLLECTIONS
@@ -35,8 +36,14 @@ class Console:
         }
 
     def loop(self):
+        """
+        main loop of the interface: it delegates the handling to the state-dependent handler
+        """
         while self.state is not State.EXIT:
             self.state, self.state_options = self.state_handlers[self.state].handle(self.state_options)
 
 def main():
-  Console().loop()
+    """
+    entry point: call this method to start the application
+    """
+    Console().loop()

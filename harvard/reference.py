@@ -1,6 +1,6 @@
 from harvard.reference_type import ReferenceType
 
-class Reference():
+class Reference:
 
     def __init__(self, type:ReferenceType, authors:str, year:str, title:str):
         self.type = type

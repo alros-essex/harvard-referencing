@@ -1,14 +1,12 @@
-import pickle
 import os
+import pickle
 
 from .collection import Collection
-from .reference import Reference
-from .reference_book import BookReference
-from .reference_ebook import EbookReference
-from .reference_chapter import ChapterEditedBookReference
-from .reference_vitalsource import VitalsourceReference
 
 class Storage:
+    """
+    Abstraction of the filesystem
+    """
 
     def __init__(self, base_path = './harvard_collections_data'):
         self.__base_path = base_path

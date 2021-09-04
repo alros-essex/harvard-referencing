@@ -1,15 +1,20 @@
 from enum import Enum
+from enum import Enum, auto
 
 class State(Enum):
-    NO_COLLECTIONS = 'No collections'
-    CREATE_NEW_COLLECTION = 'Create new collection'
-    ACTIVE_COLLECTION = 'Active collection'
-    CREATE_NEW_REFERENCE = 'Create new reference'
-    LOAD_COLLECTION = 'Load collection'
-    EDIT_REFERENCE = 'Edit reference'
-    DELETE_REFERENCE = 'Delete reference'
-    DELETE_COLLECTION = 'Delete collection'
-    SEARCH = 'Search'
-    SEARCH_BY_AUTHOR = 'Search by author'
-    SEARCH_BY_TITLE = 'Search by title'
-    EXIT = 'EXIT'
+    """
+    all possible states of the application
+    """
+
+    NO_COLLECTIONS = auto()
+    CREATE_NEW_COLLECTION = auto()
+    ACTIVE_COLLECTION = auto()
+    CREATE_NEW_REFERENCE = auto()
+    LOAD_COLLECTION = auto()
+    EDIT_REFERENCE = auto()
+    DELETE_REFERENCE = auto()
+    DELETE_COLLECTION = auto()
+    SEARCH = auto()
+    SEARCH_BY_AUTHOR = auto()
+    SEARCH_BY_TITLE = auto()
+    EXIT = auto()
