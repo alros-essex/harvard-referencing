@@ -1,7 +1,5 @@
 from harvard.collection import Collection
-from harvard.reference import BookReference
-from harvard.reference import EbookReference
-from harvard.reference import VitalsourceReference
+from harvard.reference import *
 
 import unittest
 
@@ -40,3 +38,16 @@ class TestReference(unittest.TestCase):
                 place= 'Brisbane',
                 publisher = 'Wiley Blackwell',
                 last_access = '23 May 2018').format_console())
+
+    def test_chapter_edited_book(self):
+        self.assertEqual('Malunguza, N., Dube, S., Tchuenche, J., Hove-Musekwa, S. & Mukandavire, Z. (2009) \'Two Strain HIV/AIDS Model and the Effects of Superinfection\', in: Tchuenche, J. & Mukandavire, Z. (eds) Advances in Disease Epidemiology. Hauppauge: Nova Science Publishers.171-195.',
+        ChapterEditedBookReference(
+            authors = 'Malunguza, N., Dube, S., Tchuenche, J., Hove-Musekwa, S. & Mukandavire, Z.',
+            year = '2009',
+            title = 'Two Strain HIV/AIDS Model and the Effects of Superinfection',
+            original_authors = 'Tchuenche, J. & Mukandavire, Z.',
+            original_title = 'Advances in Disease Epidemiology',
+            place = 'Hauppauge',
+            publisher = 'Nova Science Publishers',
+            pages = '171-195'
+        ).format_console())
