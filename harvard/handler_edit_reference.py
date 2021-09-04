@@ -19,7 +19,12 @@ class HandlerEditReference(HandlerBase):
             ReferenceType.NEWSPAPER_ARTICLE: EditNewspaperReference(),
             ReferenceType.ELECTRONIC_NEWSPAPER_ARTICLE: EditNewspaperOnlineReference(),
             ReferenceType.RESEARCH_REPORT: EditResearchReportReference(),
-            ReferenceType.RESEARCH_REPORT_ONLINE: EditResearchReportOnlineReference()
+            ReferenceType.RESEARCH_REPORT_ONLINE: EditResearchReportOnlineReference(),
+            ReferenceType.INDIVIDUAL_CONFERENCE_PAPERS: EditConferencePapersReference(),
+            ReferenceType.PERSONAL_CORRESPONDENCE: EditCorrespondenceReference(),
+            ReferenceType.LECTURE_MATERIALS: EditLectureReference(),
+            ReferenceType.UNITED_NATIONS_RESOLUTIONS: EditUNResolutions(),
+            ReferenceType.INTERNATIONAL_TREATIES: EditTreatyResolution()
         }
 
     def handle(self, data):

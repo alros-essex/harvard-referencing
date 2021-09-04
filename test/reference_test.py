@@ -10,6 +10,11 @@ from harvard.reference_newspaper import ArticleNewpaperReference
 from harvard.reference_electronic_newspaper import ArticleElectronicNewpaperReference
 from harvard.reference_research import ResearchReportReference
 from harvard.reference_research_online import ResearchReportOnlineReference
+from harvard.reference_conference import ConferencePapersReference
+from harvard.reference_correspondence import CorrespondenceReference
+from harvard.reference_lecture import LectureReference
+from harvard.reference_un_resolution import UNResolutionReference
+from harvard.reference_treaty import TreatyReference
 
 import unittest
 
@@ -175,4 +180,76 @@ class TestReference(unittest.TestCase):
             title = 'A minimum income standard for Britain: what people think',
             url = 'http://www.jrf.org.uk/sites/files/jrf/2226-income-poverty-standards.pdf',
             accessed = '24 May 2018'
+        ).format_console())
+
+    def test_conference(self):
+        self.assertEqual('Cook, D. (2000) \'Developing franchised business in Scotland\', \x1B[3mSmall firms: adding the spark: the 23rd ISBA national small firms policy and research conference\x1B[0m. Robert Gordon University, Aberdeen, 15–17 November. Leeds: Institute for Small Business Affairs. 127–136.',
+        ConferencePapersReference(
+            authors = 'Cook, D.',
+            year = '2000',
+            title = 'Developing franchised business in Scotland',
+            conference_title = 'Small firms: adding the spark: the 23rd ISBA national small firms policy and research conference',
+            conference_date = '15–17 November',
+            conference_location = 'Robert Gordon University, Aberdeen',
+            place = 'Leeds',
+            publisher = 'Institute for Small Business Affairs',
+            pages = '127–136'
+        ).format_console())
+
+    def test_conference2(self):
+        self.assertEqual('Cook, D. (2000) \'Developing franchised business in Scotland\', \x1B[3mSmall firms: adding the spark: the 23rd ISBA national small firms policy and research conference\x1B[0m. Robert Gordon University, Aberdeen, 15–17 November. Leeds: Institute for Small Business Affairs.',
+        ConferencePapersReference(
+            authors = 'Cook, D.',
+            year = '2000',
+            title = 'Developing franchised business in Scotland',
+            conference_title = 'Small firms: adding the spark: the 23rd ISBA national small firms policy and research conference',
+            conference_date = '15–17 November',
+            conference_location = 'Robert Gordon University, Aberdeen',
+            place = 'Leeds',
+            publisher = 'Institute for Small Business Affairs'
+        ).format_console())
+
+    def test_correspondence(self):
+        self.assertEqual('Walters, F. (2018) Conversation with John Stephens, 13 August.',
+        CorrespondenceReference(
+            authors = 'Walters, F.',
+            year = '2018',
+            title = 'Conversation with John Stephens',
+            date = '13 August'
+        ).format_console())
+
+    def test_lecture(self):
+        self.assertEqual('Smith, J. (2018) \x1B[3mMSc BS Lecturecast 1\x1B[0m [Lecturecast]. MBS JUNE 2018 Business Strategy June 2018. University of Essex Online.',
+        LectureReference(
+            authors = 'Smith, J.',
+            year = '2018',
+            title = 'MSc BS Lecturecast 1',
+            format = 'Lecturecast',
+            module = 'mbs june 2018',
+            module_title = 'Business Strategy June 2018',
+            organization = 'University of Essex Online'
+        ).format_console())
+
+    def test_un_resolution(self):
+        self.assertEqual('United Nations General Assembly (1994) \x1B[3mUnited Nations framework convention on climate change\x1B[0m. Resolution A/RES/48/189. Available from: http://daccess-dds-ny.un.org/doc/UNDOC/GEN/N94/036/43/PDF/N9403643.pdf?OpenElement [Accessed 15 September 2015].',
+        UNResolutionReference(
+            general_assembly=True,
+            year = '1994',
+            title = 'United Nations framework convention on climate change',
+            resolution_number = '48/189',
+            url = 'http://daccess-dds-ny.un.org/doc/UNDOC/GEN/N94/036/43/PDF/N9403643.pdf?OpenElement',
+            accessed = '15 September 2015'
+        ).format_console())
+
+    def test_treaty(self):
+        self.assertEqual('Convention relating to the status of refugees (1951) Treaty no. 2545. \x1B[3mUnited Nations Treaty Series\x1B[0m, 189: 137-221. Available from: https://treaties.un.org/doc/Publication/UNTS/Volume%20189/v189.pdf [Accessed 17 September 2015].',
+        TreatyReference(
+            year = '1951',
+            title = 'Convention relating to the status of refugees',
+            treaty_number = '2545',
+            publication_title = 'United Nations Treaty Series',
+            volume = '189',
+            pages = '137-221',
+            url = 'https://treaties.un.org/doc/Publication/UNTS/Volume%20189/v189.pdf',
+            accessed = '17 September 2015'
         ).format_console())

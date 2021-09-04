@@ -20,7 +20,12 @@ class HandlerCreateNewReference(HandlerBase):
             'N': EditNewspaperReference(),
             'S': EditNewspaperOnlineReference(),
             'R': EditResearchReportReference(),
-            'A': EditResearchReportOnlineReference()
+            'A': EditResearchReportOnlineReference(),
+            'I': EditConferencePapersReference(),
+            'P': EditCorrespondenceReference(),
+            'L': EditLectureReference(),
+            'U': EditUNResolutions(),
+            'T': EditTreatyResolution()
         }
 
 
@@ -38,8 +43,13 @@ class HandlerCreateNewReference(HandlerBase):
             '@option New[S]paer article online',
             '@option [R]esearch report',
             '@option Rese[A]rch report online'
+            '@option [I]ndividual conference papers',
+            '@option [P]ersonal correspondence',
+            '@option [L]ecture material',
+            '@option [U]N resolution',
+            '@option Internationa [T]reaty'
         ])
-        user_input = Utility.prompt_user_for_input(options = ['B', 'E', 'C', 'V', 'J', 'O', 'W', 'N', 'S', 'R', 'A'])
+        user_input = Utility.prompt_user_for_input(options = ['B', 'E', 'C', 'V', 'J', 'O', 'W', 'N', 'S', 'R', 'A', 'I', 'P', 'L', 'U', 'T'])
         reference = self.type_handler[user_input].edit()
         collection.add_reference(reference)
         self.storage.save_collection(collection)

@@ -12,11 +12,11 @@ class ReferenceType(Enum):
     ELECTRONIC_NEWSPAPER_ARTICLE = 'electronic_newspaper_article'
     RESEARCH_REPORT = 'research_report'
     RESEARCH_REPORT_ONLINE = 'research_report_online'
-    # INDIVIDUAL_CONFERENCE_PAPERS = 'individual_conference_papers'
-    # PERSONAL_CORRESPONDENCE = 'personal_correspondence'
-    # LECTURE_MATERIALS = 'lecture_materials'
-    # UNITED_NATIONS_RESOLUTIONS = 'united_nations_resolutions'
-    # INTERNATIONAL_TREATIES = 'international_treaties'
+    INDIVIDUAL_CONFERENCE_PAPERS = 'individual_conference_papers'
+    PERSONAL_CORRESPONDENCE = 'personal_correspondence'
+    LECTURE_MATERIALS = 'lecture_materials'
+    UNITED_NATIONS_RESOLUTIONS = 'united_nations_resolutions'
+    INTERNATIONAL_TREATIES = 'international_treaties'
 
     @classmethod
     def list(cls):
