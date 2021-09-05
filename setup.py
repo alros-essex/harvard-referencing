@@ -6,5 +6,7 @@ setup(
     packages=find_packages(include=['harvard']),
     test_suite = 'test',
     install_requires=[
-    ]
+        "colorama >= 0.4.0"
+    ],
+    python_requires='>=3.6'
 )
