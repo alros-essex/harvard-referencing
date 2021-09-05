@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class UNResolutionReference(Reference):
+    """
+    Class to manage Resolutions of United Nations
+    """
 
     def __init__(self, year:str, title:str, resolution_number:str, url:str, accessed:str, general_assembly:bool=False, security_council:bool=False):
         super().__init__(UNResolutionReference.get_type(), None, year, title)
@@ -24,9 +27,11 @@ class UNResolutionReference(Reference):
         Security Council Resolutions, place S/RES/ before the resolution number – followed by a full stop
         5. Available from: URL
         6. Date of Access – in [square brackets] followed by a full stop
+
+        eg: 
+        United Nations General Assembly (1994) United Nations framework convention on climate change. Resolution A/RES/48/189. 
+        Available from: http://daccess-dds-ny.un.org/doc/UNDOC/GEN/N94/036/43/PDF/N9403643.pdf?OpenElement [Accessed 15 September 2015].
         """
-        # United Nations General Assembly (1994) United Nations framework convention on climate change. Resolution A/RES/48/189. 
-        # Available from: http://daccess-dds-ny.un.org/doc/UNDOC/GEN/N94/036/43/PDF/N9403643.pdf?OpenElement [Accessed 15 September 2015].
         return "United Nations {organization} ({year}) \x1B[3m{title}\x1B[0m. Resolution {prefix}/RES/{number}. Available from: {url} [Accessed {accessed}].".format(
                 organization = 'General Assembly' if self.general_assembly else 'Security Council' if self.security_council else 'N.D.',
                 year = self.year,

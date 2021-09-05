@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class ChapterEditedBookReference(Reference):
+    """
+    class to manage a chapter in an edited book
+    """
 
     def __init__(self, authors: str, year: str, title: str, 
         original_authors:str, original_title:str,
@@ -28,8 +31,9 @@ class ChapterEditedBookReference(Reference):
         7. Place of publication – followed by a colon
         8. Publisher – followed by a full stop
         9. Page numbers of section referred to – followed by a full stop
+        
+        eg: Malunguza, N., Dube, S., Tchuenche, J., Hove-Musekwa, S. & Mukandavire, Z. (2009) ‘Two Strain HIV/AIDS Model and the Effects of Superinfection’, in: Tchuenche, J. & Mukandavire, Z. (eds) Advances in Disease Epidemiology. Hauppauge: Nova Science Publishers.171-195.
         """
-        #  Malunguza, N., Dube, S., Tchuenche, J., Hove-Musekwa, S. & Mukandavire, Z. (2009) ‘Two Strain HIV/AIDS Model and the Effects of Superinfection’, in: Tchuenche, J. & Mukandavire, Z. (eds) Advances in Disease Epidemiology. Hauppauge: Nova Science Publishers.171-195.
         return '{authors} ({year}) \'{title}\', in: {original_authors} (eds) {original_title}. {place}: {publisher}.{pages}.'.format(
             authors = self.authors,
             year = super().format_optional(self.year, prefix='', default='N.D.'),

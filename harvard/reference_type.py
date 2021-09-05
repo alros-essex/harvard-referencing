@@ -1,6 +1,10 @@
 from enum import Enum
 
 class ReferenceType(Enum):
+    """
+    All managed types
+    """
+
     BOOK = 'book'
     EBOOK = 'ebook'
     CHAPTER_IN_EDITED_BOOK = 'chapter_in_edited_book'

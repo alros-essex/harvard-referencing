@@ -1,8 +1,8 @@
-from harvard.collection import Collection
-from harvard.reference import BookReference, Reference, EbookReference, VitalsourceReference
-
 import copy
 import unittest
+
+from harvard.collection import Collection
+from harvard.reference_book import BookReference
 
 class TestCollection(unittest.TestCase):
 

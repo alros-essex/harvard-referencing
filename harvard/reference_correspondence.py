@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class CorrespondenceReference(Reference):
+    """
+    class to manage personal correspondence
+    """
 
     def __init__(self, authors:str, year:str, title:str, date:str):
         super().__init__(CorrespondenceReference.get_type(), authors, year, title)
@@ -17,8 +20,9 @@ class CorrespondenceReference(Reference):
         3. Medium of communication
         4. Receiver of communication – followed by a comma
         5. Day/month of communication – followed by a full stop
+        
+        eg: Walters, F. (2018) Conversation with John Stephens, 13 August.
         """
-        # Walters, F. (2018) Conversation with John Stephens, 13 August.
         return "{authors} ({year}) {title}, {date}.".format(
                 authors = self.authors,
                 year = self.year,

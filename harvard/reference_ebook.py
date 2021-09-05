@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class EbookReference(Reference):
+    """
+    class to manage ebooks
+    """
 
     def __init__(self, authors: str, year: str, title: str, 
         place: str, publisher: str, url: str, last_access:str, edition: str = None):
@@ -26,11 +29,13 @@ class EbookReference(Reference):
         6. Publisher – followed by a full stop
         7. Available from: URL
         8. Date of Access – in [square brackets] followed by a full stop
+        
+        eg:
+        Raff, D. & Scranton, P. (2016) The Emergence of Routines: Entrepreneurship, Organization and Business History. 
+        Oxford: Oxford University Press. Available from: 
+        http://0- www.oxfordscholarship.com.serlib0.essex.ac.uk/view/10.1093/acprof:oso/9780198787761.001.0001/acprof- 9780198787761# 
+        [Accessed 23 May 2018].
         """
-        # Raff, D. & Scranton, P. (2016) The Emergence of Routines: Entrepreneurship, Organization and Business History. 
-        # Oxford: Oxford University Press. Available from: 
-        # http://0- www.oxfordscholarship.com.serlib0.essex.ac.uk/view/10.1093/acprof:oso/9780198787761.001.0001/acprof- 9780198787761# 
-        # [Accessed 23 May 2018].
         return '{authors} ({year}) \x1B[3m{title}\x1B[0m.{edition} {place}: {publisher}. Available from: {url} [Accessed {last_access}].'.format(
                 authors = self.authors,
                 year = super().format_optional(self.year, prefix='', default='N.D.'),

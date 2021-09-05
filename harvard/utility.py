@@ -18,6 +18,7 @@ class Utility:
     def print_lines(lines: list):
         """
         Simple engine that prints formatted lines.
+        
         It returns all the [K]eys of the @option passed as argument
         
         Valid arguments are
@@ -54,6 +55,11 @@ class Utility:
 
     @staticmethod
     def _extract_option_letter(option: str) -> str:
+        """
+        convenience method to estract the key from a string like '@option foo [B]ar'
+
+        it returns the key in brakets or None
+        """
         match = re.search(".*\[(\w)\].*", option)
         return match.group(1) if match is not None else None
 

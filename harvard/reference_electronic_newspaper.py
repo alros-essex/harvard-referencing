@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class ArticleElectronicNewpaperReference(Reference):
+    """
+    class to manage online newpapers
+    """
 
     def __init__(self, authors:str, year:str, title:str, newspaper: str, url: str, accessed:str, pages:str = None):
         super().__init__(ArticleElectronicNewpaperReference.get_type(), authors, year, title)
@@ -22,10 +25,12 @@ class ArticleElectronicNewpaperReference(Reference):
         5. Page numbers of article if available – followed by a full stop
         6. Available from: URL
         7. Date of Access – in [square brackets] followed by a full stop
+        
+        eg:
+        Davis, K. (May 23, 2018) Ready for GDPR? 5 Tips for Marketing Leaders. Forbes. Available from:
+        https://www.forbes.com/sites/forbescontentmarketing/2018/05/23/ready-for-gdpr-5-tips-for-marketing-leaders/#367991b0c2af
+        [Accessed 24 May 2018].
         """
-        # Davis, K. (May 23, 2018) Ready for GDPR? 5 Tips for Marketing Leaders. Forbes. Available from:
-        # https://www.forbes.com/sites/forbescontentmarketing/2018/05/23/ready-for-gdpr-5-tips-for-marketing-leaders/#367991b0c2af
-        # [Accessed 24 May 2018].
         return "{authors} ({year}) {title}. \x1B[3m{newspaper}\x1B[0m.{pages} Available from: {url} [Accessed {accessed}].".format(
                 authors = self.authors,
                 year = super().format_optional(self.year, prefix='', default='N.D.'),

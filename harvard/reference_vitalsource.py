@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class VitalsourceReference(Reference):
+    """
+    Class to manage Vitalsource References
+    """
 
     def __init__(self, authors: str, year: str, title: str,
         place:str, publisher: str, last_access:str, edition: str = None):
@@ -24,8 +27,9 @@ class VitalsourceReference(Reference):
         6. Publisher – followed by a full stop
         7. Available via the Vitalsource Bookshelf – followed by a full stop
         8. Date of Access – in [square brackets] followed by a full stop
+        
+        eg: Tosey, P. & Gregory, J. (2001) Dictionary of Personal Development. Brisbane: Wiley Blackwell. Available via the Vitalsource Bookshelf. [Accessed 23 May 2018].
         """
-        # Tosey, P. & Gregory, J. (2001) Dictionary of Personal Development. Brisbane: Wiley Blackwell. Available via the Vitalsource Bookshelf. [Accessed 23 May 2018].
         return '{authors} ({year}) \x1B[3m{title}\x1B[0m.{edition} {place}: {publisher}. Available via the Vitalsource Bookshelf. [Accessed {last_access}].'.format(
             authors = self.authors,
             year = super().format_optional(self.year, prefix='', default='N.D.'),

@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class ArticleReference(Reference):
+    """
+    class to manage references to articles
+    """
 
     def __init__(self, authors:str, year:str, title:str, journal: str,
         volume:str, issue:str, pages:str):
@@ -23,8 +26,9 @@ class ArticleReference(Reference):
         5. Volume number
         6. Issue or part number – in (brackets), followed by a colon
         7. Page numbers of article – followed by a full stop
+        
+        eg: Backhaus, K., Mell, B. & Sabel, T. (2007) Business-to-Business Marketing Textbooks: A Comparative Review. Journal of Business-to-Business Marketing 14(4): 11-65.
         """
-        # Backhaus, K., Mell, B. & Sabel, T. (2007) Business-to-Business Marketing Textbooks: A Comparative Review. Journal of Business-to-Business Marketing 14(4): 11-65.
         return "{authors} ({year}) {title}. \x1B[3m{journal}\x1B[0m {volume}({issue}): {pages}.".format(
                 authors = self.authors,
                 year = super().format_optional(self.year, prefix='', default='N.D.'),

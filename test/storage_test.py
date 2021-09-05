@@ -1,9 +1,7 @@
-from harvard.reference import BookReference
 import unittest
-import os
 
 from harvard.collection import Collection
-from harvard.reference import Reference
+from harvard.reference_book import BookReference
 from harvard.storage import Storage
 
 

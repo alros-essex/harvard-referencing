@@ -13,14 +13,13 @@ class HandlerSearchCollection(HandlerBase):
         }
 
     def handle(self, _):
-        Utility.print_lines([
+        choice = Utility.interact([
             '',
             '@title Search',
             '@option [A]uthor',
             '@option [T]itle',
             ''
             ])
-        choice = Utility.prompt_user_for_input(options = ['A','T'])
         return self.handle_choice[choice], None
 
     def get_state(self):

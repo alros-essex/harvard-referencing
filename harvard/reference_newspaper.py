@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class ArticleNewpaperReference(Reference):
+    """
+    class to manage newspapers
+    """
 
     def __init__(self, authors:str, year:str, title:str, newspaper: str, pages:str = None):
         super().__init__(ArticleNewpaperReference.get_type(), authors, year, title)
@@ -18,8 +21,9 @@ class ArticleNewpaperReference(Reference):
         3. Title of the article - followed by a full stop
         4. Title of the newspaper –in italics - followed by a full stop
         5. Page numbers of article if available – followed by a full stop
+        
+        eg: Wood, Z. (May 23, 2018) Marks & Spencer reports sharp drop in annual profits. The Guardian.
         """
-        # Wood, Z. (May 23, 2018) Marks & Spencer reports sharp drop in annual profits. The Guardian.
         return "{authors} ({year}) {title}. \x1B[3m{newspaper}\x1B[0m.{pages}".format(
                 authors = self.authors,
                 year = super().format_optional(self.year, prefix='', default='N.D.'),

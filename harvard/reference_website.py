@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class WebsiteReference(Reference):
+    """
+    Class to manage Website References
+    """
 
     def __init__(self, authors:str, year:str, title:str, url:str = None, accessed:str = None):
         super().__init__(WebsiteReference.get_type(), authors, year, title)
@@ -18,8 +21,9 @@ class WebsiteReference(Reference):
         3. Title of the website - followed by a full stop
         4. Available from: URL
         5. Date of Access – in [square brackets] followed by a full stop
+
+        eg: Tobak, S. (2015) 15 Business Tips Every Entrepreneur Should Know. Available from: https://www.entrepreneur.com/article/253143 [Accessed 30 July 2018].
         """
-        # Tobak, S. (2015) 15 Business Tips Every Entrepreneur Should Know. Available from: https://www.entrepreneur.com/article/253143 [Accessed 30 July 2018].
         return "{authors} ({year}) {title}. Available from: {url} [Accessed {accessed}].".format(
                 authors = self.authors,
                 year = super().format_optional(self.year, prefix='', default='N.D.'),

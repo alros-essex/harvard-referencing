@@ -1,8 +1,10 @@
-from abc import abstractstaticmethod
+from abc import abstractstaticmethod,ABCMeta
 from harvard.reference_type import ReferenceType
 
-class Reference:
-
+class Reference(metaclass=ABCMeta):
+    """
+    base class of all references
+    """
     def __init__(self, type:ReferenceType, authors:str, year:str, title:str):
         self.type = type
         self.authors = authors
@@ -10,9 +12,15 @@ class Reference:
         self.title = title
 
     def format_console(self) -> str:
+        """
+        it prints the reference in the Harvard Style
+        """
         pass
 
     def format_optional(self, value, prefix=' ', suffix='', default=''):
+        """
+        convenience method to print data that may not be defined
+        """
         return default if value is None else prefix + value + suffix
 
     def __eq__(self, o: object) -> bool:
@@ -22,4 +30,7 @@ class Reference:
 
     @abstractstaticmethod
     def get_type() -> ReferenceType:
+        """
+        it returns the ReferenceType managed by the class
+        """
         pass

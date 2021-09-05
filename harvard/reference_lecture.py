@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class LectureReference(Reference):
+    """
+    class to manage references to lecture material
+    """
 
     def __init__(self, authors:str, year:str, title:str, format:str, module:str, module_title:str, organization:str):
         super().__init__(LectureReference.get_type(), authors, year, title)
@@ -22,8 +25,9 @@ class LectureReference(Reference):
         5. Module code – in CAPS
         6. Title of module – followed by a full stop
         7. Teaching organisation - followed by a full stop
+        
+        eg: Smith, J. (2018) MSc BS Lecturecast 1 [Lecturecast]. MBS JUNE 2018 Business Strategy June 2018. University of Essex Online.
         """
-        # Smith, J. (2018) MSc BS Lecturecast 1 [Lecturecast]. MBS JUNE 2018 Business Strategy June 2018. University of Essex Online.
         return "{authors} ({year}) \x1B[3m{title}\x1B[0m [{format}]. {module} {module_title}. {organization}.".format(
                 authors = self.authors,
                 year = super().format_optional(self.year, prefix='', default='N.D.'),

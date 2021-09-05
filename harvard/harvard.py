@@ -1,20 +1,7 @@
 from harvard.handler_base import HandlerBase
-from harvard.handler_active_collection import HandlerActiveCollection
-from harvard.handler_create_collection import HandlerCreateNewCollection
-from harvard.handler_create_reference import HandlerCreateNewReference
-from harvard.handler_delete_collection import HandlerDeleteCollection
-from harvard.handler_delete_reference import HandlerDeleteReference
-from harvard.handler_edit_reference import HandlerEditReference
-from harvard.handler_load_collection import HandlerLoadCollection
-from harvard.handler_no_collection import HandlerNoCollection
-from harvard.handler_search import HandlerSearchCollection
-from harvard.handler_search_by_author import HandlerSearchCollectionByAuthor
-from harvard.handler_search_by_title import HandlerSearchCollectionByTitle
 from harvard.storage import Storage
 from harvard.state import State
 from harvard.utility import Utility
-
-import sys, inspect
 
 class Console:
     """
@@ -27,8 +14,8 @@ class Console:
         self.storage = Storage()
         self.state_handlers = Console.__find_handlers(self.storage)
 
-    @classmethod
-    def __find_handlers(cls, storage: Storage):
+    @staticmethod
+    def __find_handlers(storage: Storage):
         """
         use reflection to find all non-abstract classes extending HandlerBase
         """

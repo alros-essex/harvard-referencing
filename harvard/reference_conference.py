@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class ConferencePapersReference(Reference):
+    """
+    class to manage conferences
+    """
 
     def __init__(self, authors:str, year:str, title:str, conference_title:str, conference_location:str, conference_date:str,
         place:str, publisher:str, pages:str = None):
@@ -27,10 +30,12 @@ class ConferencePapersReference(Reference):
         7. Place of publication – followed by a colon
         8. Publisher – followed by a full stop
         9. Page references for the paper (if available) – followed by a full stop
+        
+        eg:
+        Cook, D. (2000) 'Developing franchised business in Scotland', Small firms: adding the spark: 
+        the 23rd ISBA national small firms policy and research conference. Robert Gordon University, Aberdeen, 15–17 November. 
+        Leeds: Institute for Small Business Affairs. 127–136.
         """
-        # Cook, D. (2000) 'Developing franchised business in Scotland', Small firms: adding the spark: 
-        # the 23rd ISBA national small firms policy and research conference. Robert Gordon University, Aberdeen, 15–17 November. 
-        # Leeds: Institute for Small Business Affairs. 127–136.
         return "{authors} ({year}) '{title}', \x1B[3m{conference_title}\x1B[0m. {conference_location}, {conference_date}. {place}: {publisher}.{pages}".format(
                 authors = self.authors,
                 year = super().format_optional(self.year, prefix='', default='N.D.'),

@@ -1,6 +1,9 @@
 from .reference import Reference, ReferenceType
 
 class ArticleOnlineReference(Reference):
+    """
+    class to manage online articles
+    """
 
     def __init__(self, authors:str, year:str, title:str, journal: str,
         volume:str, issue:str, pages:str, url:str = None, accessed:str = None, doi:str = None):
@@ -27,9 +30,11 @@ class ArticleOnlineReference(Reference):
         6. Issue or part number – in (brackets), followed by a colon
         7. Page numbers of article – followed by a full stop
         8. Available from: URL (Include [Date of Access]) or DOI: (if available)
+        
+        eg:
+        Kilpatrick, C., Saito, H., Allegranzi, B. & Pittet, D. (2018) Preventing sepsis in health care – It’s in your hands: 
+        A World Health Organization call to action. Journal of Infection Prevention 19(3): 104-106. DOI: https://doi.org/10.1177%2F1757177418769146
         """
-        #  Kilpatrick, C., Saito, H., Allegranzi, B. & Pittet, D. (2018) Preventing sepsis in health care – It’s in your hands: 
-        # A World Health Organization call to action. Journal of Infection Prevention 19(3): 104-106. DOI: https://doi.org/10.1177%2F1757177418769146
         return "{authors} ({year}) {title}. \x1B[3m{journal}\x1B[0m {volume}({issue}): {pages}. {available}".format(
                 authors = self.authors,
                 year = super().format_optional(self.year, prefix='', default='N.D.'),
