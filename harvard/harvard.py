@@ -1,3 +1,4 @@
+from harvard.handler_base import HandlerBase
 from harvard.handler_active_collection import HandlerActiveCollection
 from harvard.handler_create_collection import HandlerCreateNewCollection
 from harvard.handler_create_reference import HandlerCreateNewReference
@@ -12,6 +13,8 @@ from harvard.handler_search_by_title import HandlerSearchCollectionByTitle
 from harvard.storage import Storage
 from harvard.state import State
 
+import sys, inspect
+
 class Console:
     """
     application interface
@@ -21,19 +24,20 @@ class Console:
         self.state = State.NO_COLLECTIONS
         self.state_options = None
         self.storage = Storage()
-        self.state_handlers = {
-            State.NO_COLLECTIONS: HandlerNoCollection(self.storage),
-            State.CREATE_NEW_COLLECTION: HandlerCreateNewCollection(self.storage),
-            State.ACTIVE_COLLECTION: HandlerActiveCollection(self.storage),
-            State.CREATE_NEW_REFERENCE: HandlerCreateNewReference(self.storage),
-            State.LOAD_COLLECTION: HandlerLoadCollection(self.storage),
-            State.EDIT_REFERENCE: HandlerEditReference(self.storage),
-            State.DELETE_REFERENCE: HandlerDeleteReference(self.storage),
-            State.DELETE_COLLECTION: HandlerDeleteCollection(self.storage),
-            State.SEARCH: HandlerSearchCollection(self.storage),
-            State.SEARCH_BY_AUTHOR: HandlerSearchCollectionByAuthor(self.storage),
-            State.SEARCH_BY_TITLE: HandlerSearchCollectionByTitle(self.storage)
-        }
+        self.state_handlers = Console.__find_handlers(self.storage)
+
+    @classmethod
+    def __find_handlers(cls, storage: Storage):
+        """
+        use reflection to find all non-abstract classes extending HandlerBase
+        """
+        handlers = {}
+        for _, obj in inspect.getmembers(sys.modules[__name__]):
+            if inspect.isclass(obj) and not inspect.isabstract(obj) and issubclass(obj, HandlerBase):
+                instance = obj(storage)
+                handlers[instance.get_state()]= instance
+        print(handlers)
+        return handlers
 
     def loop(self):
         """

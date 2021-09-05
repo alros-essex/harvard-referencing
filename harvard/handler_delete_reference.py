@@ -14,3 +14,6 @@ class HandlerDeleteReference(HandlerBase):
         collection.references.pop(int(selection))
         self.storage.save_collection(collection)
         return State.ACTIVE_COLLECTION, collection
+
+    def get_state(self):
+        return State.DELETE_REFERENCE

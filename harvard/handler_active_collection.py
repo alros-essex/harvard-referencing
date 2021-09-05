@@ -56,3 +56,6 @@ class HandlerActiveCollection(HandlerBase):
             options.insert(2, 'E')
             options.insert(3, 'D')
         return lines, options
+
+    def get_state(self):
+        return State.ACTIVE_COLLECTION

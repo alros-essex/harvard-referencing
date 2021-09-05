@@ -22,3 +22,6 @@ class HandlerSearchCollection(HandlerBase):
             ])
         choice = Utility.prompt_user_for_input(options = ['A','T'])
         return self.handle_choice[choice], None
+
+    def get_state(self):
+        return State.SEARCH

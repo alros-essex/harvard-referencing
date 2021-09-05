@@ -1,4 +1,4 @@
-import abc
+from abc import abstractmethod
 
 from harvard.handler_base import HandlerBase
 from harvard.storage import Storage
@@ -10,11 +10,11 @@ class HandlerSearchCollectionByField(HandlerBase):
     def __init__(self, storage: Storage):
         super().__init__(storage)
 
-    @abc.abstractclassmethod
+    @abstractmethod
     def _reference_matches(self, reference: Reference, parameter: str) -> bool:
         pass
 
-    @abc.abstractclassmethod
+    @abstractmethod
     def _prompt(self) -> str:
         pass
 

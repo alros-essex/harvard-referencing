@@ -33,3 +33,6 @@ class HandlerLoadCollection(HandlerBase):
             selected = Utility.prompt_user_for_input(options=options)
             collection = self.storage.find_collection_by_name(collections[int(selected)])
             return State.ACTIVE_COLLECTION, collection
+
+    def get_state(self):
+        return State.LOAD_COLLECTION

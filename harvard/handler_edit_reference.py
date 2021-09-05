@@ -57,3 +57,6 @@ class HandlerEditReference(HandlerBase):
         reference = self.type_handler[reference.type].edit(reference)
         collection.references[int(selection)] = reference
         return State.ACTIVE_COLLECTION, collection
+
+    def get_state(self):
+        return State.EDIT_REFERENCE

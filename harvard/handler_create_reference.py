@@ -44,7 +44,7 @@ class HandlerCreateNewReference(HandlerBase):
             'U': EditUNResolutions(),
             'T': EditTreatyResolution()
         }
-
+    
     def handle(self, collection: Collection):
         Utility.print_lines([
             '@title Create new reference',
@@ -70,3 +70,6 @@ class HandlerCreateNewReference(HandlerBase):
         collection.add_reference(reference)
         self.storage.save_collection(collection)
         return State.ACTIVE_COLLECTION, collection
+
+    def get_state(self):
+        return State.CREATE_NEW_REFERENCE

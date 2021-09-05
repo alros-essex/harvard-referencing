@@ -18,3 +18,6 @@ class HandlerCreateNewCollection(HandlerBase):
         collection = Collection(name = name, description = description)
         self.storage.save_collection(collection)
         return State.ACTIVE_COLLECTION, collection
+
+    def get_state(self):
+        return State.CREATE_NEW_COLLECTION

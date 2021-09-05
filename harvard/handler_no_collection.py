@@ -25,3 +25,6 @@ class HandlerNoCollection(HandlerBase):
             ''])
         choice = Utility.prompt_user_for_input(options = ['N','L','S','Q'])
         return self.type_return[choice], None
+
+    def get_state(self):
+        return State.NO_COLLECTIONS

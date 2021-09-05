@@ -1,5 +1,6 @@
 from harvard.handler_base import HandlerBase
 from harvard.storage import Storage
+from harvard.state import State
 
 class HandlerSearchCollectionByTitle(HandlerBase):
     
@@ -9,3 +10,6 @@ class HandlerSearchCollectionByTitle(HandlerBase):
     def handle(self, _):
         # TODO
         pass
+
+    def get_state(self):
+        return State.SEARCH_BY_TITLE

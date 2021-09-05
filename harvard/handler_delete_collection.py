@@ -21,3 +21,6 @@ class HandlerDeleteCollection(HandlerBase):
             return State.NO_COLLECTIONS, None
         else:
             return State.ACTIVE_COLLECTION, collection
+
+    def get_state(self):
+        return State.DELETE_COLLECTION
