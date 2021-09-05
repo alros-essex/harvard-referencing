@@ -17,3 +17,6 @@ class EditVitalsourceReference(EditReference):
             publisher = values['publisher'],
             last_access = values['last_access'],
             edition = values['edition'])
+
+    def get_type(self):
+        return VitalsourceReference.get_type()

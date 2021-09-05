@@ -3,8 +3,12 @@ from .reference import Reference, ReferenceType
 class CorrespondenceReference(Reference):
 
     def __init__(self, authors:str, year:str, title:str, date:str):
-        super().__init__(ReferenceType.PERSONAL_CORRESPONDENCE, authors, year, title)
+        super().__init__(CorrespondenceReference.get_type(), authors, year, title)
         self.date = date
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.PERSONAL_CORRESPONDENCE
 
     def format_console(self) -> str:
         """

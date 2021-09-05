@@ -3,13 +3,17 @@ from .reference import Reference, ReferenceType
 class UNResolutionReference(Reference):
 
     def __init__(self, year:str, title:str, resolution_number:str, url:str, accessed:str, general_assembly:bool=False, security_council:bool=False):
-        super().__init__(ReferenceType.UNITED_NATIONS_RESOLUTIONS, None, year, title)
+        super().__init__(UNResolutionReference.get_type(), None, year, title)
         self.format = format
         self.resolution_number = resolution_number
         self.url = url
         self.accessed = accessed
         self.general_assembly = general_assembly
         self.security_council = security_council
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.UNITED_NATIONS_RESOLUTIONS
 
     def format_console(self) -> str:
         """

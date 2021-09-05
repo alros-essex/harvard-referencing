@@ -23,3 +23,6 @@ class EditJournalOnlineReference(EditReference):
             url= values['url'],
             accessed= values['accessed'],
             doi= values['doi'])
+
+    def get_type(self):
+        return ArticleOnlineReference.get_type()

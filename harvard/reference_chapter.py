@@ -5,13 +5,17 @@ class ChapterEditedBookReference(Reference):
     def __init__(self, authors: str, year: str, title: str, 
         original_authors:str, original_title:str,
         place:str, publisher:str, pages:str, edition: str = None):
-        super().__init__(ReferenceType.CHAPTER_IN_EDITED_BOOK, authors, year, title)
+        super().__init__(ChapterEditedBookReference.get_type(), authors, year, title)
         self.original_authors = original_authors
         self.original_title = original_title
         self.edition = edition
         self.place = place
         self.publisher = publisher
         self.pages = pages
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.CHAPTER_IN_EDITED_BOOK
 
     def format_console(self):
         """

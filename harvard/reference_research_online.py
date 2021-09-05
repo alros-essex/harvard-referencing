@@ -3,9 +3,13 @@ from .reference import Reference, ReferenceType
 class ResearchReportOnlineReference(Reference):
 
     def __init__(self, authors:str, year:str, title:str, url: str, accessed: str):
-        super().__init__(ReferenceType.RESEARCH_REPORT_ONLINE, authors, year, title)
+        super().__init__(ResearchReportOnlineReference.get_type(), authors, year, title)
         self.url = url
         self.accessed = accessed
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.RESEARCH_REPORT_ONLINE
 
     def format_console(self) -> str:
         """

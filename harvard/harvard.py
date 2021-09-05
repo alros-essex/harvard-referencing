@@ -12,6 +12,7 @@ from harvard.handler_search_by_author import HandlerSearchCollectionByAuthor
 from harvard.handler_search_by_title import HandlerSearchCollectionByTitle
 from harvard.storage import Storage
 from harvard.state import State
+from harvard.utility import Utility
 
 import sys, inspect
 
@@ -32,11 +33,9 @@ class Console:
         use reflection to find all non-abstract classes extending HandlerBase
         """
         handlers = {}
-        for _, obj in inspect.getmembers(sys.modules[__name__]):
-            if inspect.isclass(obj) and not inspect.isabstract(obj) and issubclass(obj, HandlerBase):
-                instance = obj(storage)
-                handlers[instance.get_state()]= instance
-        print(handlers)
+        for clazz in Utility.find_classes(HandlerBase):
+            instance = clazz(storage)
+            handlers[instance.get_state()] = instance
         return handlers
 
     def loop(self):

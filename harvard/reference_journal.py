@@ -4,11 +4,15 @@ class ArticleReference(Reference):
 
     def __init__(self, authors:str, year:str, title:str, journal: str,
         volume:str, issue:str, pages:str):
-        super().__init__(ReferenceType.JOURNAL_ARTICLE, authors, year, title)
+        super().__init__(ArticleReference.get_type(), authors, year, title)
         self.journal = journal
         self.volume = volume
         self.issue = issue
         self.pages = pages
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.JOURNAL_ARTICLE
 
     def format_console(self) -> str:
         """

@@ -20,3 +20,6 @@ class EditChapterReference(EditReference):
             publisher = values['publisher'],
             pages = values['pages'],
             edition = values['edition'])
+
+    def get_type(self):
+        return ChapterEditedBookReference.get_type()

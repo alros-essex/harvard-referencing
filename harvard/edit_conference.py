@@ -21,3 +21,6 @@ class EditConferencePapersReference(EditReference):
             publisher= values['conference_location'],
             conference_location= values['conference_location'],
             pages = values['pages'])
+
+    def get_type(self):
+        return ConferencePapersReference.get_type()

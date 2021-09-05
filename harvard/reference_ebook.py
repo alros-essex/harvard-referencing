@@ -4,12 +4,17 @@ class EbookReference(Reference):
 
     def __init__(self, authors: str, year: str, title: str, 
         place: str, publisher: str, url: str, last_access:str, edition: str = None):
-        super().__init__(ReferenceType.EBOOK, authors, year, title)
+        super().__init__(EbookReference.get_type(), authors, year, title)
         self.place = place
         self.publisher = publisher
         self.url = url
         self.last_access = last_access
         self.edition = edition
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        ReferenceType.EBOOK
+
 
     def format_console(self):
         """

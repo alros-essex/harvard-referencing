@@ -3,13 +3,17 @@ from .reference import Reference, ReferenceType
 class TreatyReference(Reference):
 
     def __init__(self, year:str, title:str, treaty_number:str, publication_title:str, volume:str, pages:str, url:str, accessed:str):
-        super().__init__(ReferenceType.INTERNATIONAL_TREATIES, None, year, title)
+        super().__init__(TreatyReference.get_type(), None, year, title)
         self.treaty_number = treaty_number
         self.publication_title = publication_title
         self.volume = volume
         self.pages = pages
         self.url = url
         self.accessed = accessed
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.INTERNATIONAL_TREATIES
 
     def format_console(self) -> str:
         """

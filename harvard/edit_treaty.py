@@ -22,3 +22,6 @@ class EditTreatyResolution(EditReference):
             pages = values['pages'],
             url= values['url'],
             accessed= values['accessed'])
+
+    def get_type(self):
+        return TreatyReference.get_type()

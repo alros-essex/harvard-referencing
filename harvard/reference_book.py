@@ -4,11 +4,15 @@ class BookReference(Reference):
 
     def __init__(self, authors:str, year:str, title:str, 
         place:str, publisher:str, volume:str = None, edition:str = None):
-        super().__init__(ReferenceType.BOOK, authors, year, title)
+        super().__init__(BookReference.get_type(), authors, year, title)
         self.volume = volume
         self.edition = edition
         self.place = place
         self.publisher = publisher
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.BOOK
 
     def format_console(self) -> str:
         """

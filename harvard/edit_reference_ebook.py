@@ -19,3 +19,6 @@ class EditEbookReference(EditReference):
             url = values['url'],
             last_access = values['last_access'],
             edition = values['edition'])
+
+    def get_type(self):
+        return EbookReference.get_type()

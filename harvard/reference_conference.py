@@ -4,13 +4,17 @@ class ConferencePapersReference(Reference):
 
     def __init__(self, authors:str, year:str, title:str, conference_title:str, conference_location:str, conference_date:str,
         place:str, publisher:str, pages:str = None):
-        super().__init__(ReferenceType.PERSONAL_CORRESPONDENCE, authors, year, title)
+        super().__init__(ConferencePapersReference.get_type(), authors, year, title)
         self.publisher = publisher
         self.place = place
         self.conference_title = conference_title
         self.conference_location = conference_location
         self.conference_date = conference_date
         self.pages = pages
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.PERSONAL_CORRESPONDENCE
 
     def format_console(self) -> str:
         """

@@ -13,3 +13,6 @@ class EditResearchReportReference(EditReference):
             title = values['title'],
             publisher= values['publisher'],
             place= values['place'])
+
+    def get_type(self):
+        return ResearchReportReference.get_type()

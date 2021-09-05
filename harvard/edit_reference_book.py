@@ -17,3 +17,6 @@ class EditBookReference(EditReference):
             publisher = values['publisher'],
             volume = values['volume'],
             edition = values['edition'])
+    
+    def get_type(self):
+        return BookReference.get_type()

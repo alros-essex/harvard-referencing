@@ -1,3 +1,4 @@
+from abc import abstractstaticmethod
 from harvard.reference_type import ReferenceType
 
 class Reference:
@@ -18,4 +19,7 @@ class Reference:
         if not isinstance(o, Reference):
             return False
         return o.type == self.type and o.authors == self.authors and o.year == self.year and o.title == self.title
-        
+
+    @abstractstaticmethod
+    def get_type() -> ReferenceType:
+        pass

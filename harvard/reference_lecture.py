@@ -3,11 +3,15 @@ from .reference import Reference, ReferenceType
 class LectureReference(Reference):
 
     def __init__(self, authors:str, year:str, title:str, format:str, module:str, module_title:str, organization:str):
-        super().__init__(ReferenceType.LECTURE_MATERIALS, authors, year, title)
+        super().__init__(LectureReference.get_type(), authors, year, title)
         self.format = format
         self.module = module
         self.module_title = module_title
         self.organization = organization
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.LECTURE_MATERIALS
 
     def format_console(self) -> str:
         """

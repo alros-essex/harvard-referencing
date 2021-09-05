@@ -1,4 +1,4 @@
-from abc import abstractmethod
+from abc import abstractmethod, ABCMeta
 
 from harvard.handler_base import HandlerBase
 from harvard.storage import Storage
@@ -6,7 +6,7 @@ from harvard.reference import Reference
 from harvard.state import State
 from harvard.utility import Utility
 
-class HandlerSearchCollectionByField(HandlerBase):
+class HandlerSearchCollectionByField(HandlerBase, metaclass=ABCMeta):
     def __init__(self, storage: Storage):
         super().__init__(storage)
 

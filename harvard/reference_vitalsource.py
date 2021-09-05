@@ -4,11 +4,15 @@ class VitalsourceReference(Reference):
 
     def __init__(self, authors: str, year: str, title: str,
         place:str, publisher: str, last_access:str, edition: str = None):
-        super().__init__(ReferenceType.VITALSOURCE, authors, year, title)
+        super().__init__(VitalsourceReference.get_type(), authors, year, title)
         self.edition = edition
         self.place = place
         self.publisher = publisher
         self.last_access = last_access
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.VITALSOURCE
 
     def format_console(self):
         """

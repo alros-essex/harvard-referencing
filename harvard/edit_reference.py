@@ -1,7 +1,8 @@
+from abc import abstractmethod, ABCMeta
 from harvard.reference import Reference
 from harvard.utility import Utility
 
-class EditReference():
+class EditReference(metaclass=ABCMeta):
 
     def edit(self, reference: Reference):
         values = {}
@@ -16,3 +17,7 @@ class EditReference():
         else:
             value = Utility.prompt_user_for_input('{label} [{current}]: '.format(label = label, current = current))
             return value if value is not None else current
+
+    @abstractmethod
+    def get_type(self):
+        pass

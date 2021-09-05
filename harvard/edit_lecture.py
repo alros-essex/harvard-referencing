@@ -17,3 +17,6 @@ class EditLectureReference(EditReference):
             module= values['module'],
             module_title= values['module_title'],
             organization= values['organization'])
+
+    def get_type(self):
+        return LectureReference.get_type()

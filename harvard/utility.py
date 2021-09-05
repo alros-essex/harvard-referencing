@@ -1,10 +1,16 @@
 from colorama import Fore, Back, Style
 import re
+import sys, inspect
+
+
 
 class Utility:
     
     @staticmethod
     def interact(lines: list) -> str:
+        """
+        convenience method that calls automatically print_lines and prompt_user_for_input
+        """
         options = Utility.print_lines(lines)
         return Utility.prompt_user_for_input(options = options if len(options)>0 else None)
 
@@ -66,3 +72,18 @@ class Utility:
             else:
                 print('{color}Err. valid options are {options}{reset_fore}'.format(
                     color=Fore.RED, options = options, reset_fore = Fore.RESET))
+
+    @staticmethod
+    def find_classes(base_class: type):
+        """
+        use reflection to find all non-abstract classes extending clazz
+        """
+        lst = set()
+        for _, module in inspect.getmembers(sys.modules['harvard']):
+            if inspect.ismodule(module):
+                for _, member in inspect.getmembers(module):
+                    if inspect.isclass(member) and not inspect.isabstract(member) and issubclass(member, base_class):
+                        lst.add(member)
+        return list(lst)
+
+        

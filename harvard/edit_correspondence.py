@@ -11,3 +11,6 @@ class EditCorrespondenceReference(EditReference):
             year = values['year'],
             title = values['title'],
             date= values['date'])
+
+    def get_type(self):
+        return CorrespondenceReference.get_type()

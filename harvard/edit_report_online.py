@@ -13,3 +13,6 @@ class EditResearchReportOnlineReference(EditReference):
             title = values['title'],
             url= values['url'],
             accessed= values['accessed'])
+
+    def get_type(self):
+        return ResearchReportOnlineReference.get_type()

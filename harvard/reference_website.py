@@ -3,9 +3,13 @@ from .reference import Reference, ReferenceType
 class WebsiteReference(Reference):
 
     def __init__(self, authors:str, year:str, title:str, url:str = None, accessed:str = None):
-        super().__init__(ReferenceType.WEBSITE, authors, year, title)
+        super().__init__(WebsiteReference.get_type(), authors, year, title)
         self.url = url
         self.accessed = accessed
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.WEBSITE
 
     def format_console(self) -> str:
         """

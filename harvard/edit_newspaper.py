@@ -13,3 +13,6 @@ class EditNewspaperReference(EditReference):
             title = values['title'],
             newspaper= values['newspaper'],
             pages= values['pages'])
+    
+    def get_type(self):
+        return ArticleNewpaperReference.get_type()

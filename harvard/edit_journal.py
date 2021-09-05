@@ -17,3 +17,6 @@ class EditJournalReference(EditReference):
             journal = values['journal'],
             volume = values['volume'],
             pages = values['pages'])
+
+    def get_type(self):
+        return ArticleReference.get_type()

@@ -4,7 +4,7 @@ class ArticleOnlineReference(Reference):
 
     def __init__(self, authors:str, year:str, title:str, journal: str,
         volume:str, issue:str, pages:str, url:str = None, accessed:str = None, doi:str = None):
-        super().__init__(ReferenceType.JOURNAL_ARTICLE_ONLINE, authors, year, title)
+        super().__init__(ArticleOnlineReference.get_type(), authors, year, title)
         self.journal = journal
         self.volume = volume
         self.issue = issue
@@ -12,6 +12,10 @@ class ArticleOnlineReference(Reference):
         self.url = url
         self.accessed = accessed
         self.doi = doi
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.JOURNAL_ARTICLE_ONLINE
 
     def format_console(self) -> str:
         """

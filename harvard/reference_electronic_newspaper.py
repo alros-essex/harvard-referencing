@@ -3,11 +3,15 @@ from .reference import Reference, ReferenceType
 class ArticleElectronicNewpaperReference(Reference):
 
     def __init__(self, authors:str, year:str, title:str, newspaper: str, url: str, accessed:str, pages:str = None):
-        super().__init__(ReferenceType.ELECTRONIC_NEWSPAPER_ARTICLE, authors, year, title)
+        super().__init__(ArticleElectronicNewpaperReference.get_type(), authors, year, title)
         self.newspaper = newspaper
         self.pages = pages
         self.url = url
         self.accessed = accessed
+
+    @staticmethod
+    def get_type() -> ReferenceType:
+        return ReferenceType.ELECTRONIC_NEWSPAPER_ARTICLE
 
     def format_console(self) -> str:
         """

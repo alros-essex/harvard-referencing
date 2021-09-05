@@ -13,3 +13,6 @@ class EditWebsiteReference(EditReference):
             title = values['title'],
             url= values['url'],
             accessed= values['accessed'])
+
+    def get_type(self):
+        return WebsiteReference.get_type()

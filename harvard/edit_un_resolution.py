@@ -20,3 +20,6 @@ class EditUNResolutions(EditReference):
             accessed = values['accessed'],
             general_assembly = type == 'G',
             security_council= type == 'S')
+
+    def get_type(self):
+        return UNResolutionReference.get_type()
