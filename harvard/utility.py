@@ -1,11 +1,18 @@
 from colorama import Fore, Back, Style
+import re
 
 class Utility:
     
     @staticmethod
+    def interact(lines: list) -> str:
+        options = Utility.print_lines(lines)
+        return Utility.prompt_user_for_input(options = options if len(options)>0 else None)
+
+    @staticmethod
     def print_lines(lines: list):
         """
         Simple engine that prints formatted lines.
+        It returns all the [K]eys of the @option passed as argument
         
         Valid arguments are
         * a list of strings
@@ -18,6 +25,7 @@ class Utility:
         * @option: intended dimmed line, part of a list
         * @warning: highlighted line with a red background
         """
+        options = []
         for line in lines:
             if isinstance(line, list):
                 Utility.print_lines(line)
@@ -29,10 +37,19 @@ class Utility:
                     line = '{style}{line}{reset_st}'.format(line = line[len('@subtitle'):],style = Style.DIM, reset_st = Style.RESET_ALL)
                 elif line.startswith('@option'):
                     line = '{style} - {line}{reset_st}'.format(line = line[len('@option'):],style = Style.DIM, reset_st = Style.RESET_ALL)
+                    letter = Utility._extract_option_letter(line)
+                    if letter is not None:
+                        options.append(letter)
                 elif line.startswith('@warning'):
                     line = '{color_fg}{color_bg}{line}{reset_bg}{reset_fg}'.format(line = line[len('@title'):],
                         color_fg = Fore.YELLOW, color_bg = Back.RED, reset_bg = Back.RESET, reset_fg = Fore.RESET)
                 print(line)
+        return options
+
+    @staticmethod
+    def _extract_option_letter(option: str) -> str:
+        match = re.search(".*\[(\w)\].*", option)
+        return match.group(1) if match is not None else None
 
     @staticmethod
     def prompt_user_for_input(text: str = None, options = None) -> str:

@@ -15,7 +15,7 @@ class HandlerNoCollection(HandlerBase):
         }
 
     def handle(self, _):
-        Utility.print_lines([
+        choice = Utility.interact([
             '',
             '@title No active collections:',
             '@option Create [N]ew',
@@ -23,7 +23,6 @@ class HandlerNoCollection(HandlerBase):
             '@option [S]earch',
             '@option [Q]uit',
             ''])
-        choice = Utility.prompt_user_for_input(options = ['N','L','S','Q'])
         return self.type_return[choice], None
 
     def get_state(self):

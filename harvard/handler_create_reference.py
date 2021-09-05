@@ -46,7 +46,7 @@ class HandlerCreateNewReference(HandlerBase):
         }
     
     def handle(self, collection: Collection):
-        Utility.print_lines([
+        user_input = Utility.interact([
             '@title Create new reference',
             '@option [B]ook',
             '@option [E]book',
@@ -65,7 +65,6 @@ class HandlerCreateNewReference(HandlerBase):
             '@option [U]N resolution',
             '@option Internationa [T]reaty'
         ])
-        user_input = Utility.prompt_user_for_input(options = ['B', 'E', 'C', 'V', 'J', 'O', 'W', 'N', 'S', 'R', 'A', 'I', 'P', 'L', 'U', 'T'])
         reference = self.type_handler[user_input].edit()
         collection.add_reference(reference)
         self.storage.save_collection(collection)
