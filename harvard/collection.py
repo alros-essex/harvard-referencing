@@ -10,7 +10,11 @@ class Collection():
 
     def add_reference(self, reference: Reference):
         self.references.append(reference)
-        sorted(self.references, key = cmp_to_key(lambda a, b: a.format_console() - b.format_console()))
+        def compare(a: Reference, b: Reference):
+            af = a.format_console()
+            bf = b.format_console()
+            return -1 if af < bf else 1 if af > bf else 0
+        sorted(self.references, key = cmp_to_key(compare))
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Collection):
