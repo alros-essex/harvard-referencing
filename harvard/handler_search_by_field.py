@@ -20,12 +20,27 @@ class HandlerSearchCollectionByField(HandlerBase, metaclass=ABCMeta):
 
     def handle(self, _):
         parameter = Utility.prompt_user_for_input(text = self._prompt())
+        found = self.__search(parameter)
+        return self.__no_results() if len(found) == 0 else self.__print_results(found)
+
+    def __search(self, parameter):
         found = []
         for collection_name in self.storage.list_all_collections():
             collection = self.storage.find_collection_by_name(collection_name)
             for reference in collection.references:
                 if self._reference_matches(reference, parameter):
                     found.append((reference.format_console(),collection_name))
+        return found
+
+    def __no_results(self):
+        Utility.print_lines([
+                '',
+                '@title Search result:',
+                '@warning <no result found>',
+                ''])
+        return State.NO_COLLECTIONS, None
+
+    def __print_results(self, found):
         Utility.print_lines([
             '',
             '@title Search result:',

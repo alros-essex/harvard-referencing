@@ -28,17 +28,29 @@ class HandlerActiveCollection(HandlerBase):
             return State.DELETE_COLLECTION, collection
         elif user_input == 'D':
             return State.DELETE_REFERENCE, {'collection': collection, 'options': ref_options}
+        elif user_input == 'P':
+            lines, _ = self.__build_references(references=collection.references, for_print=True)
+            Utility.print_lines([
+                '', 
+                '@title References for your paper',
+                '',
+                lines,
+                ''
+                '@subtitle Goodbye!'
+                ])
+            return State.EXIT, _
         else:
             return State.EDIT_REFERENCE, {'collection': collection,'options': ref_options}
 
-    def __build_references(self, references):
+    def __build_references(self, references, for_print = False):
         lines = []
         options = []
         if references == []:
-            lines.append('@option <empty>')
+            lines.append('<empty>' if for_print else '@option <empty>')
         else:
             for i, reference in enumerate(references):
-                lines.append('    [{index}] : {ref}'.format(index = i, ref=reference.format_console()))
+                ref = reference.format_console()
+                lines.append('{ref}'.format(ref=ref) if for_print else '    [{index}] : {ref}'.format(index = i, ref=ref))
                 options.append(i)
         lines.append('')
         return lines, options
@@ -48,8 +60,9 @@ class HandlerActiveCollection(HandlerBase):
             '@option Create [N]ew reference',
             '@option [C]lose collection',
             '@option Eli[M]inate collection',
+            '@option Exit application and [P]rint'
             '']
-        options = ['N','C','M']
+        options = ['N','C','M','P']
         if len(references) > 0:
             lines.insert(2,'@option [E]dit reference')
             lines.insert(3,'@option [D]elete reference')

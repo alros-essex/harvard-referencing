@@ -18,9 +18,9 @@ from harvard.edit_reference_ebook import EditEbookReference
 from harvard.edit_report import EditResearchReportReference
 from harvard.edit_report_online import EditResearchReportOnlineReference
 from harvard.edit_treaty import EditTreatyResolution
-from harvard.edit_un_resolution  import EditUNResolutions
-from harvard.edit_vitalsource   import EditVitalsourceReference
-from harvard.edit_website  import EditWebsiteReference
+from harvard.edit_un_resolution import EditUNResolutionsReference
+from harvard.edit_vitalsource import EditVitalsourceReference
+from harvard.edit_website import EditWebsiteReference
 
 class HandlerCreateNewReference(HandlerBase):
 
@@ -41,7 +41,7 @@ class HandlerCreateNewReference(HandlerBase):
             'I': EditConferencePapersReference(),
             'P': EditCorrespondenceReference(),
             'L': EditLectureReference(),
-            'U': EditUNResolutions(),
+            'U': EditUNResolutionsReference(),
             'T': EditTreatyResolution()
         }
     

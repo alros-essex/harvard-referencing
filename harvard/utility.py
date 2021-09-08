@@ -2,8 +2,6 @@ from colorama import Fore, Back, Style
 import re
 import sys, inspect
 
-
-
 class Utility:
     
     @staticmethod
@@ -37,21 +35,29 @@ class Utility:
             if isinstance(line, list):
                 Utility.print_lines(line)
             else:
-                if line.startswith('@title'):
-                    line = '{color_fg}{color_bg}{line}{reset_bg}{reset_fg}'.format(line = line[len('@title'):],
-                        color_fg = Fore.BLACK, color_bg = Back.WHITE, reset_bg = Back.RESET, reset_fg = Fore.RESET)
-                elif line.startswith('@subtitle'):
-                    line = '{style}{line}{reset_st}'.format(line = line[len('@subtitle'):],style = Style.DIM, reset_st = Style.RESET_ALL)
-                elif line.startswith('@option'):
-                    line = '{style} - {line}{reset_st}'.format(line = line[len('@option'):],style = Style.DIM, reset_st = Style.RESET_ALL)
-                    letter = Utility._extract_option_letter(line)
-                    if letter is not None:
-                        options.append(letter)
-                elif line.startswith('@warning'):
-                    line = '{color_fg}{color_bg}{line}{reset_bg}{reset_fg}'.format(line = line[len('@title'):],
-                        color_fg = Fore.YELLOW, color_bg = Back.RED, reset_bg = Back.RESET, reset_fg = Fore.RESET)
-                print(line)
+                opt = Utility.__print_formatted(line)
+                if opt is not None:
+                    options.append(opt)
         return options
+
+    @staticmethod
+    def __print_formatted(line):
+        option = None
+        if line.startswith('@title'):
+            line = '{color_fg}{color_bg}{line}{reset_bg}{reset_fg}'.format(line = line[len('@title'):],
+                color_fg = Fore.BLACK, color_bg = Back.WHITE, reset_bg = Back.RESET, reset_fg = Fore.RESET)
+        elif line.startswith('@subtitle'):
+            line = '{style}{line}{reset_st}'.format(line = line[len('@subtitle'):],style = Style.DIM, reset_st = Style.RESET_ALL)
+        elif line.startswith('@option'):
+            line = '{style} - {line}{reset_st}'.format(line = line[len('@option'):],style = Style.DIM, reset_st = Style.RESET_ALL)
+            letter = Utility._extract_option_letter(line)
+            if letter is not None:
+                option = letter
+        elif line.startswith('@warning'):
+            line = '{color_fg}{color_bg}{line}{reset_bg}{reset_fg}'.format(line = line[len('@warning'):],
+                color_fg = Fore.YELLOW, color_bg = Back.RED, reset_bg = Back.RESET, reset_fg = Fore.RESET)
+        print(line)
+        return option
 
     @staticmethod
     def _extract_option_letter(option: str) -> str:

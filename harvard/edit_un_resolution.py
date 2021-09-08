@@ -2,7 +2,7 @@ from harvard.reference_un_resolution import UNResolutionReference
 from harvard.edit_reference import EditReference
 from harvard.utility import Utility
 
-class EditUNResolutions(EditReference):
+class EditUNResolutionsReference(EditReference):
 
     def edit(self, reference: UNResolutionReference = None):
         values = {}

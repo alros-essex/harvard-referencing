@@ -1,9 +1,9 @@
-from harvard.handler_base import HandlerBase
+from harvard.handler_search_by_field import HandlerSearchCollectionByField
 from harvard.storage import Storage
 from harvard.state import State
 from harvard.reference import Reference
 
-class HandlerSearchCollectionByTitle(HandlerBase):
+class HandlerSearchCollectionByTitle(HandlerSearchCollectionByField):
     
     def __init__(self, storage: Storage):
         super().__init__(storage)
