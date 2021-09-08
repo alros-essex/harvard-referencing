@@ -11,8 +11,8 @@ class EditResearchReportReference(EditReference):
             authors = values['authors'],
             year = values['year'],
             title = values['title'],
-            publisher= values['publisher'],
-            place= values['place'])
+            place= values['place'],
+            publisher= values['publisher'])
 
     def get_type(self):
         return ResearchReportReference.get_type()
