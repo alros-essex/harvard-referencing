@@ -14,7 +14,7 @@ class Collection():
             af = a.format_console()
             bf = b.format_console()
             return -1 if af < bf else 1 if af > bf else 0
-        sorted(self.references, key = cmp_to_key(compare))
+        self.references = sorted(self.references, key = cmp_to_key(compare))
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Collection):
