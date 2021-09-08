@@ -13,7 +13,7 @@ class EditReference(metaclass=ABCMeta):
         """
         values = {}
         values['authors'] = self.prompt_user_for_input('Authors', reference.authors if reference is not None else None)
-        values['year'] = self.prompt_user_for_input('Year', reference.year if reference is not None else None)
+        values['year'] = self.prompt_user_for_input('Date', reference.year if reference is not None else None)
         values['title'] = self.prompt_user_for_input('Title', reference.title if reference is not None else None)
         return values
 
