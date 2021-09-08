@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from .reference import Reference
 
 class Collection():
@@ -9,11 +10,7 @@ class Collection():
 
     def add_reference(self, reference: Reference):
         self.references.append(reference)
-        def compare(a:Reference, b:Reference):
-            af = a.format_console()
-            bf = b.format_console()
-            return 0 if af == bf else 1 if af > bf else -1
-        self.references.sort(key = compare)
+        sorted(self.references, key = cmp_to_key(lambda a, b: a.format_console() - b.format_console()))
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Collection):
