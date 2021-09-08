@@ -58,7 +58,7 @@ class HandlerCreateNewReference(HandlerBase):
             '@option [N]ewspaper article',
             '@option New[S]paer article online',
             '@option [R]esearch report',
-            '@option Rese[A]rch report online'
+            '@option Rese[A]rch report online',
             '@option [I]ndividual conference papers',
             '@option [P]ersonal correspondence',
             '@option [L]ecture material',
