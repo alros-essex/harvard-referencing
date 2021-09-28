@@ -2,8 +2,16 @@ from harvard.reference_electronic_newspaper import ArticleElectronicNewpaperRefe
 from harvard.edit_reference import EditReference
 
 class EditNewspaperOnlineReference(EditReference):
+    """Editor for Electronic Newspaper Articles"""
 
     def edit(self, reference: ArticleElectronicNewpaperReference = None):
+        """Edit or create the reference
+
+        Args:
+            reference: optional Reference, if None, the reference is simply created
+        Returns:
+            None
+        """
         values = super().edit(reference)
         values['newspaper'] = self.prompt_user_for_input('Newspaper', reference.newspaper if reference is not None else None)
         values['pages'] = self.prompt_user_for_input('Pages', reference.pages if reference is not None else None)
@@ -19,4 +27,9 @@ class EditNewspaperOnlineReference(EditReference):
             accessed= values['accessed'])
 
     def get_type(self):
+        """Returns the type handled by this editor
+        
+        Returns:
+            ReferenceType
+        """
         return ArticleElectronicNewpaperReference.get_type()

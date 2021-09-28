@@ -2,8 +2,16 @@ from harvard.reference_journal_online import ArticleOnlineReference
 from harvard.edit_reference import EditReference
 
 class EditJournalOnlineReference(EditReference):
+    """Editor for Journal Article: Online/Electronic"""
 
     def edit(self, reference: ArticleOnlineReference = None):
+        """Edit or create the reference
+
+        Args:
+            reference: optional Reference, if None, the reference is simply created
+        Returns:
+            None
+        """
         values = super().edit(reference)
         values['journal'] = self.prompt_user_for_input('Journal', reference.journal if reference is not None else None)
         values['volume'] = self.prompt_user_for_input('Volume', reference.volume if reference is not None else None)
@@ -25,4 +33,9 @@ class EditJournalOnlineReference(EditReference):
             doi= values['doi'])
 
     def get_type(self):
+        """Returns the type handled by this editor
+        
+        Returns:
+            ReferenceType
+        """
         return ArticleOnlineReference.get_type()

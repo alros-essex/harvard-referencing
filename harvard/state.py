@@ -2,9 +2,7 @@ from enum import Enum
 from enum import Enum
 
 class State(Enum):
-    """
-    all possible states of the application
-    """
+    """All possible states of the application"""
 
     NO_COLLECTIONS = 'NO_COLLECTIONS'
     CREATE_NEW_COLLECTION = 'CREATE_NEW_COLLECTION'

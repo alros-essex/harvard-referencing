@@ -2,8 +2,16 @@ from harvard.reference_treaty import TreatyReference
 from harvard.edit_reference import EditReference
 
 class EditTreatyResolution(EditReference):
+    """Editor for International Treaties, Conventions and accords"""
 
     def edit(self, reference: TreatyReference = None):
+        """Edit or create the reference
+
+        Args:
+            reference: optional Reference, if None, the reference is simply created
+        Returns:
+            None
+        """
         values = {}
         values['year'] = self.prompt_user_for_input('Year', reference.year if reference is not None else None)
         values['title'] = self.prompt_user_for_input('Title', reference.title if reference is not None else None)
@@ -24,4 +32,9 @@ class EditTreatyResolution(EditReference):
             accessed= values['accessed'])
 
     def get_type(self):
+        """Returns the type handled by this editor
+        
+        Returns:
+            ReferenceType
+        """
         return TreatyReference.get_type()

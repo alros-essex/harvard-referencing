@@ -3,8 +3,16 @@ from harvard.edit_reference import EditReference
 from harvard.utility import Utility
 
 class EditUNResolutionsReference(EditReference):
+    """Editor for United Nations Resolutions"""
 
     def edit(self, reference: UNResolutionReference = None):
+        """Edit or create the reference
+
+        Args:
+            reference: optional Reference, if None, the reference is simply created
+        Returns:
+            None
+        """
         values = {}
         values['year'] = self.prompt_user_for_input('Year', reference.year if reference is not None else None)
         values['title'] = self.prompt_user_for_input('Title', reference.title if reference is not None else None)
@@ -22,4 +30,9 @@ class EditUNResolutionsReference(EditReference):
             security_council= type == 'S')
 
     def get_type(self):
+        """Returns the type handled by this editor
+        
+        Returns:
+            ReferenceType
+        """
         return UNResolutionReference.get_type()

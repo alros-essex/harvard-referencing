@@ -2,8 +2,16 @@ from harvard.reference_ebook import EbookReference
 from harvard.edit_reference import EditReference
 
 class EditEbookReference(EditReference):
+    """Editor for E-Books"""
 
     def edit(self, reference: EbookReference = None):
+        """Edit or create the reference
+
+        Args:
+            reference: optional Reference, if None, the reference is simply created
+        Returns:
+            None
+        """
         values = super().edit(reference)
         values['edition'] = self.prompt_user_for_input('Edition', reference.edition if reference is not None else None)
         values['place'] = self.prompt_user_for_input('Place', reference.place if reference is not None else None)
@@ -21,4 +29,9 @@ class EditEbookReference(EditReference):
             edition = values['edition'])
 
     def get_type(self):
+        """Returns the type handled by this editor
+        
+        Returns:
+            ReferenceType
+        """
         return EbookReference.get_type()
