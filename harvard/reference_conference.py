@@ -17,7 +17,7 @@ class ConferencePapersReference(Reference):
 
     @staticmethod
     def get_type() -> ReferenceType:
-        return ReferenceType.PERSONAL_CORRESPONDENCE
+        return ReferenceType.INDIVIDUAL_CONFERENCE_PAPERS
 
     def format_console(self) -> str:
         """
