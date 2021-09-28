@@ -21,23 +21,42 @@ from harvard.edit_vitalsource   import EditVitalsourceReference
 from harvard.edit_website  import EditWebsiteReference
 
 class HandlerEditReference(HandlerBase):
+    """Handler to edit a reference"""
 
     def __init__(self, storage):
-        super().__init__(storage)
+        """creates the instance
         
+        Args:
+            storage: storage singleton
+        Returns:
+            None
+        """
+        super().__init__(storage)
+        # build a list of handler
         self.type_handler = HandlerEditReference.__find_editors()
 
     @staticmethod
     def __find_editors():
+        """find all editors using reflection"""
         type_handlers = {}
         for editor in Utility.find_classes(EditReference):
+            # create an instance
             instance = editor()
+            # map it to the edited type to find it later
             type_handlers[instance.get_type()] = instance
         return type_handlers
 
     def handle(self, data):
+        """Handle the current context
+        
+        Args:
+            option: current context
+        Returns:
+            next state and next context
+        """
         options = data['options']
         collection = data['collection']
+        # select one reference
         selection = Utility.prompt_user_for_input(text = 'select the index of the reference', options = list(map(str,options)))
         reference = collection.references[int(selection)]
         Utility.print_lines([
@@ -46,9 +65,19 @@ class HandlerEditReference(HandlerBase):
             ' {ref}'.format(ref = reference.format_console()),
             ''
         ])
+        # delegate to the editor. The editor is chosen based on the reference type
         reference = self.type_handler[reference.type].edit(reference)
+        # update the collection
         collection.references[int(selection)] = reference
+        # next state is the main view
         return State.ACTIVE_COLLECTION, collection
 
     def get_state(self):
+        """Return the state handled by this handler
+                
+        Args:
+            None
+        Returns:
+            state handled
+        """
         return State.EDIT_REFERENCE

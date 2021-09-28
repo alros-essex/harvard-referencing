@@ -1,11 +1,22 @@
 from .reference import Reference, ReferenceType
 
 class UNResolutionReference(Reference):
-    """
-    Class to manage Resolutions of United Nations
-    """
+    """United Nations Resolutions"""
 
     def __init__(self, year:str, title:str, resolution_number:str, url:str, accessed:str, general_assembly:bool=False, security_council:bool=False):
+        """Create the reference
+        
+        Args:
+            year: year/date of the reference
+            title: title of the reference
+            resolution_number: number of the resolution
+            url: url
+            accessed: last access on...
+            general_assembly: true if it's from the general assembly
+            security_council: true if it's from the security council
+        Returns:
+            None
+        """
         super().__init__(UNResolutionReference.get_type(), None, year, title)
         self.format = format
         self.resolution_number = resolution_number
@@ -16,10 +27,12 @@ class UNResolutionReference(Reference):
 
     @staticmethod
     def get_type() -> ReferenceType:
+        """It returns the ReferenceType managed by the class"""
         return ReferenceType.UNITED_NATIONS_RESOLUTIONS
 
     def format_console(self) -> str:
-        """
+        """Format the reference according to the standard
+        
         1. Organisation responsible
         2. Year of publication – in (brackets)
         3. Title – in italics
@@ -31,6 +44,11 @@ class UNResolutionReference(Reference):
         eg: 
         United Nations General Assembly (1994) United Nations framework convention on climate change. Resolution A/RES/48/189. 
         Available from: http://daccess-dds-ny.un.org/doc/UNDOC/GEN/N94/036/43/PDF/N9403643.pdf?OpenElement [Accessed 15 September 2015].
+
+        Args:
+            None
+        Returns:
+            formatted string
         """
         return "United Nations {organization} ({year}) \x1B[3m{title}\x1B[0m. Resolution {prefix}/RES/{number}. Available from: {url} [Accessed {accessed}].".format(
                 organization = 'General Assembly' if self.general_assembly else 'Security Council' if self.security_council else 'N.D.',
@@ -42,6 +60,13 @@ class UNResolutionReference(Reference):
                 accessed = self.accessed)
 
     def __eq__(self, o: object) -> bool:
+        """check for equality
+        
+        Args:
+            o: object
+        Returns:
+            bool, true if equal
+        """
         if not isinstance(o, UNResolutionReference):
             return False
         return super().__eq__(o) and o.format == self.format and o.resolution_number == self.resolution_number and \

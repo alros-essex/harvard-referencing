@@ -23,9 +23,18 @@ from harvard.edit_vitalsource import EditVitalsourceReference
 from harvard.edit_website import EditWebsiteReference
 
 class HandlerCreateNewReference(HandlerBase):
+    """Handler called to create a new reference in a collection"""
 
     def __init__(self,storage: Storage):
+        """creates the instance
+        
+        Args:
+            storage: storage singleton
+        Returns:
+            None
+        """
         super().__init__(storage)
+        # create a mapping between a Key and the corresponding editor
         self.type_handler = {
             'B': EditBookReference(),
             'E': EditEbookReference(),
@@ -46,6 +55,14 @@ class HandlerCreateNewReference(HandlerBase):
         }
     
     def handle(self, collection: Collection):
+        """Handle the current context
+        
+        Args:
+            option: current context
+        Returns:
+            next state and next context
+        """
+        # print the menu. This is aligned with self.type_handler
         user_input = Utility.interact([
             '@title Create new reference',
             '@option [B]ook',
@@ -65,10 +82,20 @@ class HandlerCreateNewReference(HandlerBase):
             '@option [U]N resolution',
             '@option Internationa [T]reaty'
         ])
+        # call the corresponding editor
         reference = self.type_handler[user_input].edit()
+        # save it
         collection.add_reference(reference)
         self.storage.save_collection(collection)
+        # go back to the collection view
         return State.ACTIVE_COLLECTION, collection
 
     def get_state(self):
+        """Return the state handled by this handler
+                
+        Args:
+            None
+        Returns:
+            state handled
+        """
         return State.CREATE_NEW_REFERENCE

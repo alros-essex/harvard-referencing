@@ -1,13 +1,26 @@
 from .reference import Reference, ReferenceType
 
 class ChapterEditedBookReference(Reference):
-    """
-    class to manage a chapter in an edited book
-    """
+    """Chapter in an Edited Book"""
 
     def __init__(self, authors: str, year: str, title: str, 
         original_authors:str, original_title:str,
         place:str, publisher:str, pages:str, edition: str = None):
+        """Create the reference
+        
+        Args:
+            authors: string with all the authors
+            year: year/date of the reference
+            title: title of the reference
+            original_authors: original authors
+            original_title: original title
+            place: place of publication
+            publisher: publisher
+            pages: page numbers
+            edition: edition (optional)
+        Returns:
+            None
+        """
         super().__init__(ChapterEditedBookReference.get_type(), authors, year, title)
         self.original_authors = original_authors
         self.original_title = original_title
@@ -18,10 +31,12 @@ class ChapterEditedBookReference(Reference):
 
     @staticmethod
     def get_type() -> ReferenceType:
+        """It returns the ReferenceType managed by the class"""
         return ReferenceType.CHAPTER_IN_EDITED_BOOK
 
     def format_console(self):
-        """
+        """Format the reference according to the standard
+        
         1. Author(s) surname and initials, editor(s) surname and initials or the organisation responsible for writing the book – followed by a full stop
         2. Year of publication – in (brackets)
         3. Title and subtitle (if any) of chapter/section– in ‘inverted commas’ - followed by a comma
@@ -33,6 +48,11 @@ class ChapterEditedBookReference(Reference):
         9. Page numbers of section referred to – followed by a full stop
         
         eg: Malunguza, N., Dube, S., Tchuenche, J., Hove-Musekwa, S. & Mukandavire, Z. (2009) ‘Two Strain HIV/AIDS Model and the Effects of Superinfection’, in: Tchuenche, J. & Mukandavire, Z. (eds) Advances in Disease Epidemiology. Hauppauge: Nova Science Publishers.171-195.
+
+        Args:
+            None
+        Returns:
+            formatted string
         """
         return '{authors} ({year}) \'{title}\', in: {original_authors} (eds) {original_title}. {place}: {publisher}.{pages}.'.format(
             authors = self.authors,
@@ -45,6 +65,13 @@ class ChapterEditedBookReference(Reference):
             pages = self.pages)
 
     def __eq__(self, o: object) -> bool:
+        """check for equality
+        
+        Args:
+            o: object
+        Returns:
+            bool, true if equal
+        """
         if not isinstance(o, ChapterEditedBookReference):
             return False
         return super().__eq__(o) and o.orignal_authors == self.orignal_authors and o.original_title == self.original_title \

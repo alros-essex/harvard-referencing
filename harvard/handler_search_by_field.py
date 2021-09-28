@@ -7,18 +7,49 @@ from harvard.state import State
 from harvard.utility import Utility
 
 class HandlerSearchCollectionByField(HandlerBase, metaclass=ABCMeta):
+    """Handler for the research function"""
+
     def __init__(self, storage: Storage):
+        """creates the instance
+        
+        Args:
+            storage: storage singleton
+        Returns:
+            None
+        """
         super().__init__(storage)
 
     @abstractmethod
     def _reference_matches(self, reference: Reference, parameter: str) -> bool:
+        """Template method: subclasses must override it to return if the reference is a match for the parameter
+        
+        Args:
+            reference: reference to test
+            parameters: search param
+        Returns:
+            bool, true if it's a match
+        """
         pass
 
     @abstractmethod
     def _prompt(self) -> str:
+        """Message for the user, to be overridden
+        
+        Args:
+            None
+        Returns:
+            message
+        """
         pass
 
     def handle(self, _):
+        """Handle the current context
+        
+        Args:
+            option: current context
+        Returns:
+            next state and next context
+        """
         parameter = Utility.prompt_user_for_input(text = self._prompt())
         found = self.__search(parameter)
         return self.__no_results() if len(found) == 0 else self.__print_results(found)

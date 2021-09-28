@@ -1,9 +1,7 @@
 from enum import Enum
 
 class ReferenceType(Enum):
-    """
-    All managed types
-    """
+    """All managed types"""
 
     BOOK = 'book'
     EBOOK = 'ebook'
@@ -24,4 +22,11 @@ class ReferenceType(Enum):
 
     @classmethod
     def list(cls):
+        """Returns all the supported types
+        
+        Args:
+            None
+        Returns:
+            list with all supported types
+        """
         return list(map(lambda c: c.value, cls))

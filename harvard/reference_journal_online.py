@@ -1,12 +1,26 @@
 from .reference import Reference, ReferenceType
 
 class ArticleOnlineReference(Reference):
-    """
-    class to manage online articles
-    """
+    """Journal Article: Online/Electronic"""
 
     def __init__(self, authors:str, year:str, title:str, journal: str,
         volume:str, issue:str, pages:str, url:str = None, accessed:str = None, doi:str = None):
+        """Create the reference
+        
+        Args:
+            authors: string with all the authors
+            year: year/date of the reference
+            title: title of the reference
+            journal: name of the journal
+            volume: volume
+            issue: issue number
+            pages: page numbers
+            url: url (optional)
+            accessed: last access on... (optional)
+            doi: doi (optional)
+        Returns:
+            None
+        """
         super().__init__(ArticleOnlineReference.get_type(), authors, year, title)
         self.journal = journal
         self.volume = volume
@@ -18,10 +32,12 @@ class ArticleOnlineReference(Reference):
 
     @staticmethod
     def get_type() -> ReferenceType:
+        """It returns the ReferenceType managed by the class"""
         return ReferenceType.JOURNAL_ARTICLE_ONLINE
 
     def format_console(self) -> str:
-        """
+        """Format the reference according to the standard
+        
         1. Author(s) surname and initials, editor(s) surname and initials or the organisation responsible for writing the journal – followed by a full stop
         2. Year of publication – in (brackets)
         3. Title of the article – followed by a full stop
@@ -34,6 +50,11 @@ class ArticleOnlineReference(Reference):
         eg:
         Kilpatrick, C., Saito, H., Allegranzi, B. & Pittet, D. (2018) Preventing sepsis in health care – It’s in your hands: 
         A World Health Organization call to action. Journal of Infection Prevention 19(3): 104-106. DOI: https://doi.org/10.1177%2F1757177418769146
+
+        Args:
+            None
+        Returns:
+            formatted string
         """
         return "{authors} ({year}) {title}. \x1B[3m{journal}\x1B[0m {volume}({issue}): {pages}. {available}".format(
                 authors = self.authors,
@@ -50,6 +71,13 @@ class ArticleOnlineReference(Reference):
         return "DOI: {doi}".format(doi = self.doi) if self.doi is not None else 'Available from: {url} [Accessed {date}]'.format(url = self.url, date = self.accessed)
 
     def __eq__(self, o: object) -> bool:
+        """check for equality
+        
+        Args:
+            o: object
+        Returns:
+            bool, true if equal
+        """
         if not isinstance(o, ArticleOnlineReference):
             return False
         return super().__eq__(o) and o.volume == self.volume and o.journal == self.journal and o.issue == self.issue \
