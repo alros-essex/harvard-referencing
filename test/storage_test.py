@@ -39,7 +39,7 @@ class TestStorage(unittest.TestCase):
         collection = Collection(name = 'My Collection', description = 'My Collection', references = [reference])
         self.storage.save_collection(collection)
         db_collection = self.storage.find_collection_by_name('My Collection')
-        self.assertEquals(collection, db_collection)
+        self.assertEqual(collection, db_collection)
 
     def test_insert_delete_collection(self):
         collection = Collection(name = 'My Collection', description = 'My Collection')

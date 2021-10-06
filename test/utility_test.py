@@ -16,7 +16,7 @@ class TestStorage(unittest.TestCase):
         self.assertIsNone(Utility._extract_option_letter("@option something something"))
 
     def test_list_classes(self):
-        self.assertEquals(11, len(Utility.find_classes(HandlerBase)))
+        self.assertEqual(11, len(Utility.find_classes(HandlerBase)))
 
 if __name__ == '__main__':
     unittest.main()
